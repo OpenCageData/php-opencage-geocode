@@ -1,0 +1,30 @@
+{
+  "name": "php-opencage-geocode",
+  "version": "1.0.0",
+  "description": "A PHP library for geocoding via the OpenCage Geocoder API",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lokku/php-opencage-geocode.git"
+  },
+  "homepage": "https://github.com/lokku/php-opencage-geocode",
+  "author": {
+      "name": "OpenCage Data (a Lokku brand)",
+      "email": "info@opencagedata.com",
+      "url": "http://opencagedata.com"
+  },
+  "license": "BSD",
+  "keywords": [
+    "library",
+    "php",
+    "geocoding",
+    "opencagedata"
+  ],
+  "devDependencies": {
+    "grunt": "^0.4.4",
+    "grunt-cli": "~0.1.11",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-concat": "^0.4.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-phplint": "^0.0.5"
+  }
+}
