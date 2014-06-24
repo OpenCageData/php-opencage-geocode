@@ -1,6 +1,6 @@
 <?php
 
-require_once('OpenCage.Geocoder.php');
+require_once('../src/OpenCage.Geocoder.php');
 
 $query = "82 Clerkenwell Road, London";
 $key = 'dummy-api-key';
