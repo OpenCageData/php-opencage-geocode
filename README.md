@@ -5,7 +5,7 @@ geocoder.
 
 ## Dependencies and Requirements
 
-* PHP 5
+* PHP 5 or 7
 * CURL extension or ...
 * fopen wrappers
 

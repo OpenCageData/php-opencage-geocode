@@ -1,16 +1,16 @@
 {
   "name": "php-opencage-geocode",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A PHP library for geocoding via the OpenCage Geocoder API",
   "repository": {
     "type": "git",
-    "url": "git@github.com:lokku/php-opencage-geocode.git"
+    "url": "git@github.com:opencagedata/php-opencage-geocode.git"
   },
-  "homepage": "https://github.com/lokku/php-opencage-geocode",
+  "homepage": "https://github.com/opencagedata/php-opencage-geocode",
   "author": {
-      "name": "OpenCage Data (a Lokku brand)",
+      "name": "OpenCage Data Limited",
       "email": "info@opencagedata.com",
-      "url": "http://opencagedata.com"
+      "url": "http://geocoder.opencagedata.com"
   },
   "license": "BSD",
   "keywords": [
