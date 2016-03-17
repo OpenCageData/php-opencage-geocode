@@ -1,0 +1,20 @@
+{
+  "name": "php-opencage-geocode",
+  "version": "1.0.2",
+  "description": "A PHP library for geocoding via the OpenCage Geocoder API",
+  "authors": {
+    "name": "OpenCage Data Limited",
+    "email": "info@opencagedata.com",
+    "homepage": "http://geocoder.opencagedata.com"
+  },
+  "require": {
+    "php": ">=5.3.0",
+  },
+  "license": "BSD",
+  "keywords": [
+    "geocode",
+    "php",
+    "geocoding",
+    "opencagedata"
+  ],
+}
