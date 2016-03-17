@@ -1,5 +1,5 @@
 {
-  "name": "php-opencage-geocode",
+  "name": "opencage/geocode",
   "version": "1.0.2",
   "description": "A PHP library for geocoding via the OpenCage Geocoder API",
   "authors": {
