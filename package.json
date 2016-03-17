@@ -6,15 +6,18 @@
     "type": "git",
     "url": "git@github.com:opencagedata/php-opencage-geocode.git"
   },
+  "require": {
+    "php": ">=5.3.0",
+  },
   "homepage": "https://github.com/opencagedata/php-opencage-geocode",
   "author": {
-      "name": "OpenCage Data Limited",
-      "email": "info@opencagedata.com",
-      "url": "http://geocoder.opencagedata.com"
+    "name": "OpenCage Data Limited",
+    "email": "info@opencagedata.com",
+    "url": "http://geocoder.opencagedata.com"
   },
   "license": "BSD",
   "keywords": [
-    "library",
+    "geocode",
     "php",
     "geocoding",
     "opencagedata"
