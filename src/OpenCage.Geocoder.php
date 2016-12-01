@@ -1,10 +1,13 @@
 <?php
 
 namespace OpenCage {
-    require_once('OpenCage.AbstractGeocoder.php');
 
-    class Geocoder extends AbstractGeocoder {
-        public function geocode($query) {
+    include_once 'OpenCage.AbstractGeocoder.php';
+
+    class Geocoder extends AbstractGeocoder
+    {
+        public function geocode($query)
+        {
             $url = self::URL . 'q=' . urlencode($query);
             if (empty($this->key)) {
                 throw new \Exception('Missing API key');
