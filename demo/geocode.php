@@ -1,6 +1,8 @@
 <?php
 
-require_once('../src/OpenCage.Geocoder.php');
+include(dirname(__DIR__).'/src/OpenCage/Geocoder.php');
+
+// use OpenCage\Geocoder;
 
 $query = "82 Clerkenwell Road, London";
 $key = 'YOUR-API-KEY';
