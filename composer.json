@@ -9,6 +9,11 @@
       "homepage": "http://geocoder.opencagedata.com"
     }
   ],
+  "autoload": {
+    "psr-4": {
+      "OpenCage\\Geocoder\\": "src"
+    }
+  },
   "require": {
     "php": ">=5.3.0"
   },
@@ -19,8 +24,13 @@
   "license": "BSD",
   "keywords": [
     "geocode",
-    "php",
+    "addresses",
     "geocoding",
     "opencagedata"
-  ]
+  ],
+  "support": {
+    "issues": "https://github.com/OpenCageData/php-opencage-geocode/issues",
+    "source": "https://github.com/OpenCageData/php-opencage-geocode",
+    "docs": "https://geocoder.opencagedata.com/api"
+  }
 }
