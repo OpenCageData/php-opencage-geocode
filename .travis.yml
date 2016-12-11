@@ -1,0 +1,11 @@
+sudo: false
+
+language: php
+
+php:
+- '5.4'
+- '5.6'
+- '7.0'
+
+notifications:
+  slack: opencagedata:jka26jSli6kacZMd1KimVc5k
