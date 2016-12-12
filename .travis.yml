@@ -1,0 +1,18 @@
+sudo: false
+
+language: php
+
+php:
+- '5.6'
+- '7.0'
+- hhvm
+
+install: composer install --dev
+
+env:
+  global:
+    secure: "E6Jl3i/IeWT3LsqUt48V8hv/m+oRsLQaw5Sls014H40D3o/AZueCFSVcXygrgn/OuKpcLii+9JXOoPyOCcNizgYPnTesOnJPBDDNZpFNunJOIieBNvpr/kryeu90RCJkNl9ejx0yCpzyrHeMWU1rfeyV3fbjc7AHWxKqVPphyIQ="
+
+notifications:
+  slack: opencagedata:jka26jSli6kacZMd1KimVc5k
+
