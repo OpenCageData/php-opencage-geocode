@@ -1,10 +1,10 @@
 <?php
 
-namespace OpenCage;
+namespace OpenCage\Geocoder\Test;
 
-include(dirname(__DIR__).'/../src/OpenCage/Geocoder.php');
+use OpenCage\Geocoder\Geocoder;
 
-class GeocodeTest extends \PHPUnit_Framework_TestCase
+class GeocoderTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testMissingKey()
@@ -40,8 +40,7 @@ class GeocodeTest extends \PHPUnit_Framework_TestCase
 
     public function testLondon()
     {
-        $key = getenv('OPENCAGE_API_KEY');
-        $geocoder = new Geocoder($key);
+        $geocoder = new Geocoder(API_KEY);
         $query = "82 Clerkenwell Road, London";
         $result = $geocoder->geocode($query);
 

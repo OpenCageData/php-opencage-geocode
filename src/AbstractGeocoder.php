@@ -1,6 +1,6 @@
 <?php
 
-namespace OpenCage;
+namespace OpenCage\Geocoder;
 
 abstract class AbstractGeocoder
 {

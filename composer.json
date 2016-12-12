@@ -2,6 +2,7 @@
   "name": "opencage/geocode",
   "version": "1.0.3",
   "description": "A PHP library for geocoding via the OpenCage Geocoder API",
+  "license": "BSD",
   "authors": [
     {
       "name": "OpenCage Data Limited",
@@ -21,7 +22,9 @@
       "phpunit/phpunit": "~4.0",
       "squizlabs/php_codesniffer": "^2.7"
   },
-  "license": "BSD",
+  "archive": {
+    "exclude": ["vendor", ".DS_Store"]
+  },
   "keywords": [
     "geocode",
     "addresses",

@@ -1,9 +1,8 @@
 <?php
 
-namespace OpenCage;
+namespace OpenCage\Geocoder;
 
-require __DIR__.'/AbstractGeocoder.php';
-// use OpenCage\AbstractGeocoder;
+use OpenCage\Geocoder\AbstractGeocoder;
 
 class Geocoder extends AbstractGeocoder
 {
