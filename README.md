@@ -1,5 +1,7 @@
 # OpenCage Data Geocoding Library for PHP
 
+[![Build Status](https://travis-ci.org/OpenCageData/php-opencage-geocode.svg?branch=master)](https://travis-ci.org/OpenCageData/php-opencage-geocode)
+
 A [PHP](http://php.net/) library to use [OpenCage Data's geocoder API](https://geocoder.opencagedata.com/).
 
 ## Overview
