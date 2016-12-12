@@ -45,7 +45,7 @@ See the file `demo/geocode.php`
 ## Example results
 
 
-```PHP
+```php
 Array
 (
     [total_results] => 2
