@@ -1,61 +1,49 @@
 # OpenCage Data Geocoding Library for PHP
 
-A [PHP](http://php.net/) library that uses [OpenCage Data's](http://www.opencagedata.com/)
-geocoder.
+A [PHP](http://php.net/) library to use [OpenCage Data's geocoder API](https://geocoder.opencagedata.com/).
 
-## Dependencies and Requirements
-
-* PHP 5 or 7
-* CURL extension or ...
-* fopen wrappers
-
-The OpenCage Data Geocoding Library for PHP attempts to use the [CURL](http://www.php.net/manual/en/book.curl.php)
+## Overview
+The OpenCage Data Geocoding PHP library attempts to use the [CURL](http://www.php.net/manual/en/book.curl.php)
 extension to access the OpenCage Data Geocoder. If CURL support is not available, the library
-falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen).
+falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen). PHP 5.6, 7 and [hhvm](http://hhvm.com/) are supported.
 
-To use the library you must either have the CURL extension compiled into your version of PHP
-or configure the use of fopen wrappers via the `allow_url_fopen` directive in your `php.ini`.
+To use the library you must either have the CURL extension compiled into your version of PHP or configure the use of fopen wrappers via the `allow_url_fopen` directive in your `php.ini`.
 
-## Usage
+### Authentication
 
-Load the library:
+You need an API key, which can be signed for [here](https://geocoder.opencagedata.com).
 
-```PHP
-require_once('OpenCage.Geocoder.php');
+## Installation
+
+### With Composer
+
+The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/). Require the library in your project's composer.json file.
+
+```
+$ composer require opencage/geocode
 ```
 
-Create an instance of the geocoder library, passing a valid OpenCage Data Geocoder API key
-as a parameter to the geocoder library's constructor:
+Import the Geocoder class.
 
-```PHP
-$key = 'your-api-key-here';
-$geocoder = new OpenCage\Geocoder($key);
+```
+require "vendor/autoload.php";
 ```
 
-Pass a string containing the query or address to be geocoded to the library's `geocoder` method:
+Start geocoding
 
-```PHP
-$query = "82 Clerkenwell Road, London";
-$result = $geocoder->geocode($query);
-```
-
-Putting all of this together, a complete sample would look like this:
-
-```PHP
-<?php
-
-require_once('OpenCage.Geocoder.php');
-
-$query = "82 Clerkenwell Road, London";
-$key = 'your-api-key-here';
-$geocoder = new OpenCage\Geocoder($key);
-$result = $geocoder->geocode($query);
+```php
+$geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');
+$result = $geocoder->geocode('82 Clerkenwell Road, London');
 print_r($result);
-
-?>
 ```
 
-Running the above code sample will produce an output similar to this:
+### The old fashioned way
+
+See the file `demo/geocode.php`
+
+
+## Example results
+
 
 ```PHP
 Array
@@ -279,3 +267,5 @@ Array
         )
 )
 ```
+
+-- end --
