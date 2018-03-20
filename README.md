@@ -7,11 +7,11 @@ A [PHP](http://php.net/) library to use [OpenCage Data's geocoder API](https://g
 ## Overview
 The OpenCage Data Geocoding PHP library attempts to use the [CURL](http://www.php.net/manual/en/book.curl.php)
 extension to access the OpenCage Data Geocoder. If CURL support is not available, the library
-falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen). 
+falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen).
 
 PHP 5.6, 7 and [hhvm](http://hhvm.com/) are supported.
 
-To use the library you must either have the CURL extension compiled into your version of PHP or configure 
+To use the library you must either have the CURL extension compiled into your version of PHP or configure
 the use of fopen wrappers via the `allow_url_fopen` directive in your `php.ini`.
 
 ### Authentication
@@ -22,7 +22,7 @@ You need an API key, which can be signed for [here](https://geocoder.opencagedat
 
 ### With Composer
 
-The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/). 
+The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/).
 Require the library in your project's composer.json file.
 
 ```
