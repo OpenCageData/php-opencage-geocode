@@ -4,7 +4,7 @@
 [![Kritika Analysis Status](https://kritika.io/users/freyfogle/repos/7252234193599842/heads/master/status.svg)](https://kritika.io/users/freyfogle/repos/7252234193599842/heads/master/)
 [![PHP version](https://badge.fury.io/ph/opencage%2Fgeocode.svg)](https://badge.fury.io/ph/opencage%2Fgeocode)
 
-A [PHP](http://php.net/) library to use [OpenCage Data's geocoder API](https://geocoder.opencagedata.com/).
+A [PHP](http://php.net/) library to use [OpenCage Data's geocoder API](https://opencagedata.com).
 
 ## Overview
 The OpenCage Data Geocoding PHP library attempts to use the [CURL](http://www.php.net/manual/en/book.curl.php)
@@ -18,7 +18,7 @@ the use of fopen wrappers via the `allow_url_fopen` directive in your `php.ini`.
 
 ### Authentication
 
-You need an API key, which can be signed for [here](https://geocoder.opencagedata.com).
+You need an API key, which can be signed for [here](https://opencagedata.com).
 
 ## Installation
 
