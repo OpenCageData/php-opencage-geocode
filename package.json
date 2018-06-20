@@ -10,9 +10,9 @@
   "author": {
     "name": "OpenCage Data Limited",
     "email": "info@opencagedata.com",
-    "url": "http://geocoder.opencagedata.com"
+    "url": "https://opencagedata.com"
   },
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "keywords": [
     "geocode",
     "php",
