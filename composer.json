@@ -1,6 +1,6 @@
 {
   "name": "opencage/geocode",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "A PHP library for geocoding via the OpenCage Geocoder API",
   "license": "BSD-2-Clause",
   "authors": [
@@ -34,6 +34,6 @@
   "support": {
     "issues": "https://github.com/OpenCageData/php-opencage-geocode/issues",
     "source": "https://github.com/OpenCageData/php-opencage-geocode",
-    "docs": "https://geocoder.opencagedata.com/api"
+    "docs": "https://opencagedata.com/api"
   }
 }
