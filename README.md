@@ -11,7 +11,7 @@ The OpenCage Data Geocoding PHP library attempts to use the [CURL](http://www.ph
 extension to access the OpenCage Data Geocoder. If CURL support is not available, the library
 falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen).
 
-PHP 5.6, 7 and [hhvm](http://hhvm.com/) are supported.
+PHP 5.6, 7 are supported. [hhvm 4](http://hhvm.com/) is no longer supported.
 
 To use the library you must either have the CURL extension compiled into your version of PHP or configure
 the use of fopen wrappers via the `allow_url_fopen` directive in your `php.ini`.
