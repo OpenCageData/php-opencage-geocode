@@ -25,7 +25,7 @@ class GeocoderTest extends \PHPUnit_Framework_TestCase
         $geocoder = new Geocoder('invalid-APIKEY');
         $result = $geocoder->geocode('Johannesburg');
         // print_r($result);
-        $this->assertEquals(403, $result['status']['code']);
+        $this->assertEquals(401, $result['status']['code']);
         $this->assertEquals('invalid API key', $result['status']['message']);
     }
 
