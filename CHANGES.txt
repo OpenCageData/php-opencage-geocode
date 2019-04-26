@@ -1,0 +1,4 @@
+2.0.3 -- Sat Apr 27 2019
+=====================================================
+- API returns HTTP 401 for invalid key
+- add Vagrant setup for testing
