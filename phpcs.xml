@@ -8,8 +8,8 @@
   <!-- https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PSR2/ruleset.xml -->
   <rule ref="PSR2"/>
 
-
-
+  <exclude-pattern>./vendor/</exclude-pattern>
+  <exclude-pattern>./tests/bootstrap.php</exclude-pattern>
 
   <!-- default 120 -->
   <rule ref="Generic.Files.LineLength">

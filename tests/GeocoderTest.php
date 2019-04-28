@@ -4,7 +4,7 @@ namespace OpenCage\Geocoder\Test;
 
 use OpenCage\Geocoder\Geocoder;
 
-class GeocoderTest extends \PHPUnit_Framework_TestCase
+class GeocoderTest extends \PHPUnit\Framework\TestCase
 {
 
     public function testMissingKey()

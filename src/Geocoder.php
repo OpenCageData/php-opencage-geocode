@@ -10,10 +10,8 @@ class Geocoder extends AbstractGeocoder
     {
         $url = self::URL . 'q=' . urlencode($query);
         
-        if(is_array($optParams) && !empty($optParams))
-        {
-            foreach($optParams as $param => $paramValue)
-            {
+        if (is_array($optParams) && !empty($optParams)) {
+            foreach ($optParams as $param => $paramValue) {
                 $url .= '&'.$param.'=' . urlencode($paramValue);
             }
         }

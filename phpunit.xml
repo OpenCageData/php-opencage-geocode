@@ -7,8 +7,8 @@
     convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
-    syntaxCheck="true"
     bootstrap="tests/bootstrap.php"
+    beStrictAboutTestsThatDoNotTestAnything="true"
     >
     <php>
     </php>
