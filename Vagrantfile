@@ -17,12 +17,12 @@ Vagrant.configure("2") do |config|
   # documentation for more information about their specific syntax and use.
   config.vm.provision "shell", inline: <<-SHELL
     apt-get update -qq
-    apt-get install -y -qq php-cli php-curl
+    apt-get install -y -qq php-cli php-curl php-xml php-mbstring unzip
     curl -sS https://getcomposer.org/installer | sudo php -- --install-dir=/usr/local/bin --filename=composer
     cd /home/vagrant/php-opencage-geocode
-    composer install --dev
+    composer install
     # run tests:
     OPENCAGE_API_KEY=... ./vendor/bin/phpunit
-    ./vendor/bin/phpcs
+    ./vendor/bin/phpcs .
   SHELL
 end
