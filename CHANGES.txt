@@ -1,3 +1,11 @@
+2.1.0 -- Thu May 9 2019
+=====================================================
+- file_get_contents printed errors and returned false. Instead those are
+   caughed now and an empty valid JSON document with the error code is
+   returned. file_get_contents is only used when the curl fetching doesn't
+   work (rare)
+
+
 2.0.3 -- Sat Apr 27 2019
 =====================================================
 - API returns HTTP 401 for invalid key

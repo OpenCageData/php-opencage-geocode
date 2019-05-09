@@ -31,7 +31,7 @@ abstract class AbstractGeocoder
 
     protected function getJSON($query)
     {
-        if (function_exists('curl_version')) {
+        if (function_exists('curl_version') && !getenv('SKIP_CURL')) {
             $ret = $this->getJSONByCurl($query);
             return $ret;
         } elseif (ini_get('allow_url_fopen')) {
@@ -52,8 +52,34 @@ abstract class AbstractGeocoder
             ]
         );
 
-        $ret =  file_get_contents($query);
+        error_clear_last();
+
+        $ret = @file_get_contents($query);
+
+        if ($ret === false) {
+            if ($error = error_get_last()) {
+                if (preg_match('/ 401 /', $error['message'])) {
+                    return $this->generateErrorJSON(401, 'invalid API key');
+                } elseif (preg_match('/ 402 /', $error['message'])) {
+                    return $this->generateErrorJSON(402, 'quota exceeded');
+                }
+            }
+        }
+
         return $ret;
+    }
+
+    protected function generateErrorJSON($code, $message)
+    {
+        $response = [
+                        'results' => [],
+                        'total_results' => 0,
+                        'status' => [
+                            'code' => $code,
+                            'message' => $message
+                        ]
+                    ];
+        return json_encode($response);
     }
 
     protected function getJSONByCurl($query)
