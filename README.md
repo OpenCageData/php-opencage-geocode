@@ -1,24 +1,27 @@
-# OpenCage Data Geocoding Library for PHP
+# OpenCage Geocoding API Library for PHP
+
+A [PHP](http://php.net/) library to use the [OpenCage geocoding API](https://opencagedata.com).
+
+## Build Status
 
 [![Build Status](https://travis-ci.org/OpenCageData/php-opencage-geocode.svg?branch=master)](https://travis-ci.org/OpenCageData/php-opencage-geocode)
 [![Kritika Analysis Status](https://kritika.io/users/freyfogle/repos/7252234193599842/heads/master/status.svg)](https://kritika.io/users/freyfogle/repos/7252234193599842/heads/master/)
 [![PHP version](https://badge.fury.io/ph/opencage%2Fgeocode.svg)](https://badge.fury.io/ph/opencage%2Fgeocode)
 
-A [PHP](http://php.net/) library to use [OpenCage Data's geocoder API](https://opencagedata.com).
-
 ## Overview
-The OpenCage Data Geocoding PHP library attempts to use the [CURL](http://www.php.net/manual/en/book.curl.php)
-extension to access the OpenCage Data Geocoder. If CURL support is not available, the library
-falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen).
+This library attempts to use the [CURL](http://www.php.net/manual/en/book.curl.php)
+extension to access the OpenCage Geocoding API. If CURL support is not available, the
+library falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen).
 
 PHP 5.6, 7 are supported. [hhvm 4](http://hhvm.com/) is no longer supported.
 
-To use the library you must either have the CURL extension compiled into your version of PHP or configure
-the use of fopen wrappers via the `allow_url_fopen` directive in your `php.ini`.
+To use the library you must either have the CURL extension compiled into your version
+of PHP or configure the use of fopen wrappers via the `allow_url_fopen` directive in
+your `php.ini`.
 
 ### Authentication
 
-You need an API key, which can be signed for [here](https://opencagedata.com).
+You need an API key, which you can sign up for [here](https://opencagedata.com).
 
 ## Installation
 
@@ -275,5 +278,18 @@ Array
         )
 )
 ```
+
+## Copyright
+
+Copyright (c) OpenCage GmbH. See LICENSE for details.
+
+## Who is OpenCage GmbH?
+
+<a href="https://opencagedata.com"><img src="opencage_logo_300_150.png"></a>
+
+We run the [OpenCage Geocoder](https://opencagedata.com). Learn more [about us](https://opencagedata.com/about). 
+
+We also run [Geomob](https://thegeomob.com), a series of regular meetups for location based service creators, where we do our best to highlight geoinnovation. If you like geo stuff, you will probably enjoy [the Geomob podcast](https://thegeomob.com/podcast/).
+
 
 -- end --
