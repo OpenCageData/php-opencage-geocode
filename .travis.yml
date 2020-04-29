@@ -18,5 +18,5 @@ env:
     secure: "E6Jl3i/IeWT3LsqUt48V8hv/m+oRsLQaw5Sls014H40D3o/AZueCFSVcXygrgn/OuKpcLii+9JXOoPyOCcNizgYPnTesOnJPBDDNZpFNunJOIieBNvpr/kryeu90RCJkNl9ejx0yCpzyrHeMWU1rfeyV3fbjc7AHWxKqVPphyIQ="
 
 notifications:
-  slack: opencagedata:jka26jSli6kacZMd1KimVc5k
-
+  slack:
+    secure: fpSUTI+HvmAwxvOdUe4RIc+WD8IfSptVTgx9iMsG4MAdvhKqw4CfaVuG+SN7Npr5WCBPXGWlFMqJ7u1dXXeXbmP0IMEc9T6Ahi/45kFpb5kWiFerP+lNTyfDX3ruuPz4lfBZ4NhKv60LXTkgmwWFQfhtWYgT+oIZnc/2Fvl03Eo=
