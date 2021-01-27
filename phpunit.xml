@@ -1,25 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit backupGlobals="false"
-    backupStaticAttributes="false"
-    colors="true"
-    convertErrorsToExceptions="true"
-    convertNoticesToExceptions="true"
-    convertWarningsToExceptions="true"
-    processIsolation="false"
-    stopOnFailure="false"
-    bootstrap="tests/bootstrap.php"
-    beStrictAboutTestsThatDoNotTestAnything="true"
-    >
-    <php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         bootstrap="tests/bootstrap.php"
+         beStrictAboutTestsThatDoNotTestAnything="true"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory>./src/</directory>
+    </include>
+  </coverage>
+  <php>
     </php>
-    <testsuites>
-        <testsuite name="OpenCage geocoder Test Suite">
-            <directory suffix=".php">./tests/</directory>
-        </testsuite>
-    </testsuites>
-    <filter>
-        <whitelist>
-            <directory>./src/</directory>
-        </whitelist>
-    </filter>
+  <testsuites>
+    <testsuite name="OpenCage geocoder Test Suite">
+      <directory suffix=".php">./tests/</directory>
+    </testsuite>
+  </testsuites>
 </phpunit>
