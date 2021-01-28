@@ -1,12 +1,11 @@
 {
   "name": "opencage/geocode",
-  "version": "2.2.0",
   "description": "A PHP library for geocoding via the OpenCage Geocoder API",
   "license": "BSD-2-Clause",
   "authors": [
     {
-      "name": "OpenCage Data Limited",
-      "email": "info@opencagedata.com",
+      "name": "OpenCage GmbH",
+      "email": "support@opencagedata.com",
       "homepage": "https://opencagedata.com"
     }
   ],
