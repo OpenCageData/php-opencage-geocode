@@ -7,6 +7,7 @@ A [PHP](http://php.net/) library to use the [OpenCage geocoding API](https://ope
 [![Build Status](https://travis-ci.org/OpenCageData/php-opencage-geocode.svg?branch=master)](https://travis-ci.org/OpenCageData/php-opencage-geocode)
 [![Kritika Analysis Status](https://kritika.io/users/freyfogle/repos/7252234193599842/heads/master/status.svg)](https://kritika.io/users/freyfogle/repos/7252234193599842/heads/master/)
 [![PHP version](https://badge.fury.io/ph/opencage%2Fgeocode.svg)](https://badge.fury.io/ph/opencage%2Fgeocode)
+[![Twitter Follow](https://img.shields.io/twitter/follow/OpenCage?label=Follow%20OpenCage&style=social)](https://twitter.com/opencage)
 
 ## Overview
 This library attempts to use the [CURL](http://www.php.net/manual/en/book.curl.php)
