@@ -1,3 +1,9 @@
+3.1.0 -- Wed Sep 15 2021
+=====================================================
+- Error response when curl encounters a network issue (e.g. DNS, old TLS cipher). Before it
+   would silently fail.
+- Use test API keys in test suite for HTTP 200 and 402 responses
+
 3.0.0 -- Thu Jan 28 2021
 =====================================================
 - deprecate PHP 5.6, added PHP 8

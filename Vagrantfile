@@ -22,7 +22,7 @@ Vagrant.configure("2") do |config|
     cd /home/vagrant/php-opencage-geocode
     composer install
     # run tests:
-    OPENCAGE_API_KEY=... ./vendor/bin/phpunit
+    ./vendor/bin/phpunit
     ./vendor/bin/phpcs .
   SHELL
 end

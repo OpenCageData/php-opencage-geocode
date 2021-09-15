@@ -59,9 +59,14 @@ abstract class AbstractGeocoder
         if ($ret === false) {
             if ($error = error_get_last()) {
                 if (preg_match('/ 401 /', $error['message'])) {
+                    // failed to open stream: HTTP request failed! HTTP/1.1 401 Unauthorized
                     return $this->generateErrorJSON(401, 'invalid API key');
                 } elseif (preg_match('/ 402 /', $error['message'])) {
+                    // failed to open stream: HTTP request failed! HTTP/1.1 402 Payment Required
                     return $this->generateErrorJSON(402, 'quota exceeded');
+                } elseif (preg_match('/php_network_getaddresses/', $error['message'])) {
+                    // failed to open stream: php_network_getaddresses: getaddrinfo failed: No address associated with hostname
+                    return $this->generateErrorJSON(498, 'network issue '.$error['message']);
                 }
             }
         }
@@ -93,6 +98,9 @@ abstract class AbstractGeocoder
         curl_setopt_array($ch, $options);
 
         $ret = curl_exec($ch);
+        if ($ret === false) {
+            return $this->generateErrorJSON(498, 'network issue '.curl_error($ch));
+        }
         return $ret;
     }
 

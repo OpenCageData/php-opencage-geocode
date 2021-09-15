@@ -8,8 +8,16 @@ class Geocoder extends AbstractGeocoder
 {
     public function geocode($query, $optParams = [])
     {
-        $url = self::URL . 'q=' . urlencode($query);
-        
+        $base_url = self::URL;
+        if (is_array($optParams) && !empty($optParams)) {
+            if (array_key_exists('host', $optParams)) {
+                $base_url = str_replace('api.opencagedata.com', $optParams['host'], $base_url);
+                unset($optParams['host']);
+            }
+        }
+
+        $url = $base_url . 'q=' . urlencode($query);
+
         if (is_array($optParams) && !empty($optParams)) {
             foreach ($optParams as $param => $paramValue) {
                 $url .= '&'.$param.'=' . urlencode($paramValue);

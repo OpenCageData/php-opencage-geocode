@@ -29,18 +29,31 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('invalid API key', $result['status']['message']);
     }
 
+    public function testNetworkRequestError()
+    {
+        // https://opencagedata.com/api#testingkeys
+        $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
+        $result = $geocoder->geocode('London', ['host' => 'doesnotexist.opencagedata.com']);
+        // print_r($result);
+            
+        $this->assertEquals(498, $result['status']['code']);
+        $this->assertStringContainsString('network issue', $result['status']['message']);
+        $this->assertStringContainsString('doesnotexist.opencagedata.com', $result['status']['message']);
+    }
+
     public function testOverQuota()
     {
-        $geocoder = new Geocoder('514980ca9e21b830b9797818288a1f4f'); // this key has a daily quota of 1
+        // https://opencagedata.com/api#testingkeys
+        $geocoder = new Geocoder('4372eff77b8343cebfc843eb4da4ddc4');
         $result = $geocoder->geocode('Johannesburg');
-        $result = $geocoder->geocode('Johannesburg'); // twice to be safe
         $this->assertEquals(402, $result['status']['code']);
         $this->assertEquals('quota exceeded', $result['status']['message']);
     }
 
     public function testLondon()
     {
-        $geocoder = new Geocoder(API_KEY);
+        // https://opencagedata.com/api#testingkeys
+        $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
         $query = "82 Clerkenwell Road, London";
         $result = $geocoder->geocode($query);
 
