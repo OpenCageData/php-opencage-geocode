@@ -23,6 +23,10 @@ your `php.ini`.
 
 You need an API key, which you can sign up for [here](https://opencagedata.com).
 
+### Tutorial
+
+You can find [a comprehensive tutorial for using this module on the OpenCage site](https://opencagedata.com/tutorials/geocode-in-php).
+
 ## Installation
 
 ### With Composer
