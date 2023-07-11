@@ -1,0 +1,37 @@
+name: CI Tests
+
+on: [push, pull_request]
+
+env:
+  OPENCAGE_API_KEY: ${{ secrets.GEO_CODER_OPENCAGE_API_KEY }}
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        # https://www.php.net/supported-versions.php
+        php-version: ['7.4', '8.0', '8.1']
+
+    name: PHP OpenCage Geocode
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up PHP ${{ matrix.php-version }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --no-interaction
+
+      - name: Run tests
+        run: |
+          composer validate
+          ./vendor/bin/phpunit
+          ./vendor/bin/phpcs .
+          SKIP_CURL=1 ./vendor/bin/phpunit

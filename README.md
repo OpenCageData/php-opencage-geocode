@@ -4,7 +4,7 @@ A [PHP](http://php.net/) library to use the [OpenCage geocoding API](https://ope
 
 ## Build Status / Code Quality
 
-[![Build Status](https://travis-ci.com/OpenCageData/php-opencage-geocode.svg?branch=master)](https://travis-ci.com/OpenCageData/php-opencage-geocode)
+[![Build Status](https://github.com/OpenCageData/php-opencage-geocode/actions/workflows/ci.yml/badge.svg)](https://github.com/OpenCageData/php-opencage-geocode/actions/workflows/ci.yml)
 [![PHP version](https://badge.fury.io/ph/opencage%2Fgeocode.svg)](https://badge.fury.io/ph/opencage%2Fgeocode)
 ![Mastodon Follow](https://img.shields.io/mastodon/follow/109287663468501769?domain=https%3A%2F%2Fen.osm.town%2F&style=social)
 
