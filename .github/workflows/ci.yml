@@ -2,12 +2,19 @@ name: CI Tests
 
 on: [push, pull_request]
 
+env:
+  OPENCAGE_API_KEY: ${{ secrets.GEO_CODER_OPENCAGE_API_KEY }}
+
 jobs:
   test:
     strategy:
       matrix:
         # https://www.php.net/supported-versions.php
         php-version: ['7.4', '8.0', '8.1', '8.2']
+
+    name: PHP OpenCage Geocode
+
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
