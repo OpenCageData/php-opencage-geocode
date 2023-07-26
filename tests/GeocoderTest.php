@@ -19,7 +19,6 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->fail();
     }
 
-
     public function testInvalidKey()
     {
         $geocoder = new Geocoder('invalid-APIKEY');
