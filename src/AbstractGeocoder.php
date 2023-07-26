@@ -57,17 +57,23 @@ abstract class AbstractGeocoder
         $ret = @file_get_contents($query);
 
         if ($ret === false) {
-            if ($error = error_get_last()) {
-                if (preg_match('/ 401 /', $error['message'])) {
+            if (isset($http_response_header) && is_array($http_response_header)) {
+                $error_message = $http_response_header[0];
+                if ($error = error_get_last()) {
+                    $error_message = $error['message'];
+                }
+
+                // print "got an eror: $error\n";
+                if (preg_match('/ 401 /', $error_message)) {
                     // failed to open stream: HTTP request failed! HTTP/1.1 401 Unauthorized
                     return $this->generateErrorJSON(401, 'invalid API key');
-                } elseif (preg_match('/ 402 /', $error['message'])) {
+                } elseif (preg_match('/ 402 /', $error_message)) {
                     // failed to open stream: HTTP request failed! HTTP/1.1 402 Payment Required
                     return $this->generateErrorJSON(402, 'quota exceeded');
-                } elseif (preg_match('/php_network_getaddresses/', $error['message'])) {
-                    // failed to open stream: php_network_getaddresses: getaddrinfo failed: No address associated with hostname
-                    return $this->generateErrorJSON(498, 'network issue '.$error['message']);
                 }
+            } else {
+                // failed to open stream: php_network_getaddresses: getaddrinfo failed: No address associated with hostname
+                return $this->generateErrorJSON(498, "network issue accessing $query");
             }
         }
 
