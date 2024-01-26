@@ -57,6 +57,8 @@ abstract class AbstractGeocoder
         $ret = @file_get_contents($query);
 
         if ($ret === false) {
+            /** NOTE: https://github.com/phpstan/phpstan/issues/3213 */
+            /** @phpstan-ignore-next-line */
             if (isset($http_response_header) && is_array($http_response_header)) {
                 $error_message = $http_response_header[0];
                 if ($error = error_get_last()) {

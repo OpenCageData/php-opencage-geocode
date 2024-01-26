@@ -39,3 +39,6 @@ jobs:
           ./vendor/bin/phpunit
           ./vendor/bin/phpcs .
           SKIP_CURL=1 ./vendor/bin/phpunit
+
+      - name: Run PHPStan
+        run: ./vendor/bin/phpstan analyse --level 5 src tests demo 
