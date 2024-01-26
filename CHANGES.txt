@@ -1,4 +1,9 @@
-3.2.0 -- Wed Jul 26 2022
+3.2.1 -- Fri Jan 26 2024
+=====================================================
+- add testing against PHP 8.3
+- add PHPStan linting
+
+3.2.0 -- Wed Jul 26 2023
 =====================================================
 - requires PHP >= 8.0, PHP 7.4 no longer supported 
 - add testing against PHP 8.2
