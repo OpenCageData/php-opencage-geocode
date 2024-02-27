@@ -6,10 +6,12 @@ abstract class AbstractGeocoder
 {
     const TIMEOUT = 10;
     const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
+    const PROXY = null;
 
     protected $key;
     protected $timeout;
     protected $url;
+    protected $proxy;
 
     public function __construct($key = null)
     {
@@ -27,6 +29,11 @@ abstract class AbstractGeocoder
     public function setTimeout($timeout)
     {
         $this->timeout = $timeout;
+    }
+
+    public function setProxy($proxy)
+    {
+        $this->proxy = $proxy;
     }
 
     protected function getJSON($query)
@@ -103,6 +110,9 @@ abstract class AbstractGeocoder
             CURLOPT_URL => $query,
             CURLOPT_RETURNTRANSFER => 1
         ];
+        if ($this->proxy) {
+            $options[CURLOPT_PROXY] = $this->proxy;
+        }
         curl_setopt_array($ch, $options);
 
         $ret = curl_exec($ch);

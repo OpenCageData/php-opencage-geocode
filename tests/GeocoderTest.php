@@ -61,4 +61,22 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(200, $result['status']['code']);
         $this->assertEquals('OK', $result['status']['message']);
     }
+
+    public function testProxy()
+    {
+        $proxy = getenv('PROXY');
+        if (!$proxy) {
+            $this->markTestSkipped('PROXY environment variable not set');
+        }
+        // https://opencagedata.com/api#testingkeys
+        $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
+        $geocoder->setProxy($proxy);
+        $query = "82 Clerkenwell Road, London";
+        $result = $geocoder->geocode($query);
+
+        // print_r($result);
+
+        $this->assertEquals(200, $result['status']['code']);
+        $this->assertEquals('OK', $result['status']['message']);
+    }
 }

@@ -14,6 +14,10 @@ class Geocoder extends AbstractGeocoder
                 $base_url = str_replace('api.opencagedata.com', $optParams['host'], $base_url);
                 unset($optParams['host']);
             }
+            if (array_key_exists('proxy', $optParams)) {
+                $base_url = str_replace('api.opencagedata.com', $optParams['host'], $base_url);
+                unset($optParams['proxy']);
+            }
         }
 
         $url = $base_url . 'q=' . urlencode($query);

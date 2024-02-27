@@ -37,8 +37,16 @@ jobs:
         run: |
           composer validate
           ./vendor/bin/phpunit
-          ./vendor/bin/phpcs .
           SKIP_CURL=1 ./vendor/bin/phpunit
 
+      - name: Run proxy tests
+        run: |
+          docker run -d --name=tinyproxy -p 8888:8888 monokal/tinyproxy:latest ANY
+          PROXY=http://0.0.0.0:8888 ./vendor/bin/phpunit
+          docker rm -f tinyproxy
+
+      - name: Run Linter
+        run: ./vendor/bin/phpcs .
+
       - name: Run PHPStan
-        run: ./vendor/bin/phpstan analyse --level 5 src tests demo 
+        run: ./vendor/bin/phpstan analyse --level 5 src tests demo
