@@ -14,8 +14,8 @@ extension to access the OpenCage Geocoding API. If CURL support is not available
 library falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen).
 
 To use the library you must either have the CURL extension compiled into your version
-of PHP or configure the use of fopen wrappers via the `allow_url_fopen` directive in
-your `php.ini`.
+of PHP. Alternatively configure the use of fopen wrappers via the `allow_url_fopen`
+directive in your `php.ini`.
 
 ### Authentication
 
@@ -30,19 +30,24 @@ You can find [a comprehensive tutorial for using this module on the OpenCage sit
 ### With Composer
 
 The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/).
-Require the library in your project's composer.json file.
+Require the library in your project's `composer.json` file.
 
-```
+```php
 $ composer require opencage/geocode
 ```
 
 Import the Geocoder class.
 
-```
+```php
 require "vendor/autoload.php";
 ```
 
-Start geocoding
+### The old fashioned way
+
+See the file `demo/geocode.php`
+
+
+## Geocoding
 
 ```php
 $geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');
@@ -50,10 +55,46 @@ $result = $geocoder->geocode('82 Clerkenwell Road, London');
 print_r($result);
 ```
 
-### The old fashioned way
+### Reverse geocoding
 
-See the file `demo/geocode.php`
+```php
+$geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');
+$result = $geocoder->geocode('43.831,4.360'); # latitude,longitude (y,x)
+print $result['results'][0]['formatted'];
+// 3 Rue de Rivarol, 30020 Nîmes, France
+```
 
+### Set optional parameters
+
+See the full list at:
+[https://opencagedata.com/api#optional-params](https://opencagedata.com/api#optional-params)
+
+```php
+$result = $geocoder->geocode('6 Rue Massillon, 30020 Nîmes, France', [
+    'language' => 'fr',
+    'countrycode' => 'fr'
+]);
+if ($result && $result['total_results'] > 0) {
+  $first = $result['results'][0];
+  print $first['geometry']['lng'] . ';' . $first['geometry']['lat'] . ';' . $first['formatted'] . "\n";
+  // 4.360081;43.8316276;6 Rue Massillon, 30020 Nîmes, Frankreich
+}
+```
+
+### Set a proxy URL
+
+```php
+$geocoder->setProxy('http://proxy.example.com:1234');
+$result = $geocoder->geocode("Brandenburger Tor, Berlin");
+print_r($result['results'][0]['formatted']);
+// Brandenburger Tor, Unter den Linden, 10117 Berlin, Germany
+print_r($result['results'][0]['geometry']);
+// Array
+// (
+//    [lat] => 52.5166047
+//    [lng] => 13.3809897
+// )
+```
 
 ## Example results
 
