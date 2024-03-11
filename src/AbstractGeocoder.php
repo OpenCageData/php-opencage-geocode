@@ -4,6 +4,8 @@ namespace OpenCage\Geocoder;
 
 abstract class AbstractGeocoder
 {
+    const VERSION  = '3.3.0';  // if changing this => remember to match everything with the git tag
+
     const TIMEOUT = 10;
     const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
     const PROXY = null;
@@ -12,6 +14,7 @@ abstract class AbstractGeocoder
     protected $timeout;
     protected $url;
     protected $proxy;
+    protected $user_agent;
 
     public function __construct($key = null)
     {
@@ -19,6 +22,7 @@ abstract class AbstractGeocoder
             $this->setKey($key);
         }
         $this->setTimeout(self::TIMEOUT);
+        $this->user_agent = 'opencage-php/' . self::TIMEOUT . ' (PHP ' . phpversion() . '; ' . php_uname('s') . ' ' . php_uname('r') . ')';
     }
 
     public function setKey($key)
@@ -54,6 +58,7 @@ abstract class AbstractGeocoder
         $context = stream_context_create(
             [
                 'http' => [
+                    'user_agent' => $this->user_agent,
                     'timeout' => $this->timeout
                 ]
             ]
@@ -114,6 +119,12 @@ abstract class AbstractGeocoder
             $options[CURLOPT_PROXY] = $this->proxy;
         }
         curl_setopt_array($ch, $options);
+
+        $headers = [
+            'User-Agent: ' . $this->user_agent
+        ];
+
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
         $ret = curl_exec($ch);
         if ($ret === false) {
