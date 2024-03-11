@@ -22,7 +22,7 @@ abstract class AbstractGeocoder
             $this->setKey($key);
         }
         $this->setTimeout(self::TIMEOUT);
-        $this->user_agent = 'opencage-php/' . self::TIMEOUT . ' (PHP ' . phpversion() . '; ' . php_uname('s') . ' ' . php_uname('r') . ')';
+        $this->user_agent = 'opencage-php/' . self::VERSION . ' (PHP ' . phpversion() . '; ' . php_uname('s') . ' ' . php_uname('r') . ')';
     }
 
     public function setKey($key)
