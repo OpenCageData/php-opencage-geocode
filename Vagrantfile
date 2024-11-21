@@ -8,7 +8,11 @@ Vagrant.configure("2") do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "bento/ubuntu-22.04"
+  config.vm.box = "bento/ubuntu-24.04"
+  if RUBY_PLATFORM.include?('darwin') && RUBY_PLATFORM.include?('arm64')
+    # Apple Silicon/M processor
+    config.vm.box = 'gutehall/ubuntu24-04'
+  end
 
   config.vm.synced_folder ".", "/home/vagrant/php-opencage-geocode"
 
