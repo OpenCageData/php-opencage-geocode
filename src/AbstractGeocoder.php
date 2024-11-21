@@ -4,7 +4,7 @@ namespace OpenCage\Geocoder;
 
 abstract class AbstractGeocoder
 {
-    const VERSION  = '3.3.0';  // if changing this => remember to match everything with the git tag
+    const VERSION  = '3.3.1';  // if changing this => remember to match everything with the git tag
 
     const TIMEOUT = 10;
     const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
