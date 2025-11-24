@@ -4,7 +4,7 @@ namespace OpenCage\Geocoder;
 
 abstract class AbstractGeocoder
 {
-    const VERSION  = '3.3.1';  // if changing this => remember to match everything with the git tag
+    const VERSION  = '3.3.2';  // if changing this => remember to match everything with the git tag
 
     const TIMEOUT = 10;
     const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
@@ -113,7 +113,7 @@ abstract class AbstractGeocoder
         $options = [
             CURLOPT_TIMEOUT => $this->timeout,
             CURLOPT_URL => $query,
-            CURLOPT_RETURNTRANSFER => 1
+            CURLOPT_RETURNTRANSFER => true
         ];
         if ($this->proxy) {
             $options[CURLOPT_PROXY] = $this->proxy;
