@@ -113,7 +113,7 @@ abstract class AbstractGeocoder
         $options = [
             CURLOPT_TIMEOUT => $this->timeout,
             CURLOPT_URL => $query,
-            CURLOPT_RETURNTRANSFER => 1
+            CURLOPT_RETURNTRANSFER => true
         ];
         if ($this->proxy) {
             $options[CURLOPT_PROXY] = $this->proxy;

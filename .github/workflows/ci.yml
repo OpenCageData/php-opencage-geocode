@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '15 22 2 * *'
+    - cron: "15 22 2 * *"
 
 env:
   OPENCAGE_API_KEY: ${{ secrets.GEO_CODER_OPENCAGE_API_KEY }}
@@ -14,7 +14,7 @@ jobs:
     strategy:
       matrix:
         # https://www.php.net/supported-versions.php
-        php-version: ['8.2', '8.3', '8.4']
+        php-version: ["8.1", "8.2", "8.3", "8.4", "8.5"]
 
     name: PHP OpenCage Geocode
 
@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set up PHP ${{ matrix.php-version }}
         uses: shivammathur/setup-php@v2
@@ -31,7 +31,9 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer install --no-progress --no-suggest --no-interaction
+        run: |
+          if [ "${{ matrix.php-version }}" != "8.5" ]; then rm composer.lock; fi
+          composer install --no-progress --no-suggest --no-interaction
 
       - name: Run tests
         run: |
