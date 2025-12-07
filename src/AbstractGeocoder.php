@@ -67,12 +67,16 @@ abstract class AbstractGeocoder
         error_clear_last();
 
         $ret = @file_get_contents($query);
-
         if ($ret === false) {
-            /** NOTE: https://github.com/phpstan/phpstan/issues/3213 */
-            /** @phpstan-ignore-next-line */
-            if (isset($http_response_header) && is_array($http_response_header)) {
-                $error_message = $http_response_header[0];
+            $response_headers = function_exists('http_get_last_response_headers')
+                ? http_get_last_response_headers()
+                /** NOTE: https://github.com/phpstan/phpstan/issues/3213 */
+                /** @phpstan-ignore-next-line */
+                : (isset($http_response_header) ? $http_response_header : null);
+
+            /** @phpstan-ignore function.alreadyNarrowedType */
+            if (isset($response_headers) && is_array($response_headers)) {
+                $error_message = $response_headers[0];
                 if ($error = error_get_last()) {
                     $error_message = $error['message'];
                 }
