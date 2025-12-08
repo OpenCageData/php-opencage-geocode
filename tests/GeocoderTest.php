@@ -6,7 +6,6 @@ use OpenCage\Geocoder\Geocoder;
 
 class GeocoderTest extends \PHPUnit\Framework\TestCase
 {
-
     public function testMissingKey()
     {
         $geocoder = new Geocoder();
@@ -34,7 +33,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
         $result = $geocoder->geocode('London', ['host' => 'doesnotexist.opencagedata.com']);
         // print_r($result);
-            
+
         $this->assertEquals(498, $result['status']['code']);
         $this->assertStringContainsString('network issue', $result['status']['message']);
         $this->assertStringContainsString('doesnotexist.opencagedata.com', $result['status']['message']);

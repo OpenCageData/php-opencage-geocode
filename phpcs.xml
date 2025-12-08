@@ -3,10 +3,9 @@
 
   <description>opencage geocode standard</description>
 
-  <!-- based on another standard, you can find it here -->
-  <!-- /usr/share/php/PHP/CodeSniffer/Standards/PSR2/ruleset.xml -->
-  <!-- https://github.com/squizlabs/PHP_CodeSniffer/blob/master/CodeSniffer/Standards/PSR2/ruleset.xml -->
-  <rule ref="PSR2"/>
+  <!-- PSR12 is the modern replacement for deprecated PSR2 -->
+  <!-- https://www.php-fig.org/psr/psr-12/ -->
+  <rule ref="PSR12" />
 
   <exclude-pattern>./vendor/</exclude-pattern>
   <exclude-pattern>./tests/bootstrap.php</exclude-pattern>
@@ -14,8 +13,8 @@
   <!-- default 120 -->
   <rule ref="Generic.Files.LineLength">
     <properties>
-     <property name="lineLimit" value="150"/>
-     <property name="absoluteLineLimit" value="0"/>
+      <property name="lineLimit" value="150" />
+      <property name="absoluteLineLimit" value="0" />
     </properties>
   </rule>
 
