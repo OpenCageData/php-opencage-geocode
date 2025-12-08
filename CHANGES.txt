@@ -1,3 +1,9 @@
+3.3.3 -- Mon De 8 2025
+=====================================================
+- Uses http_get_last_response_headers() with PHP >= 8.4
+- Update composer config, adds script
+- Uses PSR-12
+
 3.3.2 -- Mon Nov 24 2025
 =====================================================
 - add testing against PHP 8.5
