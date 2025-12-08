@@ -1,3 +1,4 @@
 .vagrant
 vendor
 .phpunit.*
+.php-cs-fixer.cache

@@ -4,11 +4,11 @@ namespace OpenCage\Geocoder;
 
 abstract class AbstractGeocoder
 {
-    const VERSION  = '3.3.2';  // if changing this => remember to match everything with the git tag
+    public const VERSION  = '3.3.2';  // if changing this => remember to match everything with the git tag
 
-    const TIMEOUT = 10;
-    const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
-    const PROXY = null;
+    public const TIMEOUT = 10;
+    public const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
+    public const PROXY = null;
 
     protected $key;
     protected $timeout;
@@ -132,7 +132,7 @@ abstract class AbstractGeocoder
 
         $ret = curl_exec($ch);
         if ($ret === false) {
-            return $this->generateErrorJSON(498, 'network issue '.curl_error($ch));
+            return $this->generateErrorJSON(498, 'network issue ' . curl_error($ch));
         }
         return $ret;
     }

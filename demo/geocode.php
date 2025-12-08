@@ -1,7 +1,7 @@
 <?php
 
-include(dirname(__DIR__).'/src/AbstractGeocoder.php');
-include(dirname(__DIR__).'/src/Geocoder.php');
+include(dirname(__DIR__) . '/src/AbstractGeocoder.php');
+include(dirname(__DIR__) . '/src/Geocoder.php');
 
 // use OpenCage\Geocoder;
 

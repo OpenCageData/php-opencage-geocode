@@ -24,10 +24,10 @@ class Geocoder extends AbstractGeocoder
 
         if (is_array($optParams) && !empty($optParams)) {
             foreach ($optParams as $param => $paramValue) {
-                $url .= '&'.$param.'=' . urlencode($paramValue);
+                $url .= '&' . $param . '=' . urlencode($paramValue);
             }
         }
-        
+
         if (empty($this->key)) {
             throw new \Exception('Missing API key');
         }
