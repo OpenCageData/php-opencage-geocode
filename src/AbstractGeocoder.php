@@ -74,7 +74,7 @@ abstract class AbstractGeocoder
                 /** @phpstan-ignore-next-line */
                 : (isset($http_response_header) ? $http_response_header : null);
 
-            /** @phpstan-ignore function.alreadyNarrowedType */
+            /** @phpstan-ignore-next-line */
             if (isset($response_headers) && is_array($response_headers)) {
                 $error_message = $response_headers[0];
                 if ($error = error_get_last()) {
