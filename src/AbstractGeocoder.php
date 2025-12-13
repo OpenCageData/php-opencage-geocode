@@ -68,11 +68,11 @@ abstract class AbstractGeocoder
 
         $ret = @file_get_contents($query);
         if ($ret === false) {
-            $response_headers = function_exists('http_get_last_response_headers')
-                ? http_get_last_response_headers()
-                /** NOTE: https://github.com/phpstan/phpstan/issues/3213 */
-                /** @phpstan-ignore-next-line */
-                : (isset($http_response_header) ? $http_response_header : null);
+            if (function_exists('http_get_last_response_headers')) {
+                $http_response_header = http_get_last_response_headers();
+            }
+
+            $response_headers = isset($http_response_header) ? $http_response_header : null;
 
             /** @phpstan-ignore-next-line */
             if (isset($response_headers) && is_array($response_headers)) {
