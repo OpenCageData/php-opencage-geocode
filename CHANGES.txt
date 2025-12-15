@@ -1,4 +1,8 @@
-3.3.3 -- Mon De 8 2025
+3.3.4 -- Mon Dec 15 2025
+=====================================================
+- removes deprecation warning when using PHP 8.5 on $http_response_header created by fopen (thanks to @TimWolla)
+
+3.3.3 -- Mon Dec 8 2025
 =====================================================
 - Uses http_get_last_response_headers() with PHP >= 8.4
 - Update composer config, adds script
