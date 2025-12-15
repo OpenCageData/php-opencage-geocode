@@ -37,9 +37,10 @@ jobs:
 
       - name: Run phpunit tests (with and without cURL)
         run: |
-          composer check
+          ./vendor/bin/phpunit --display-deprecations
+          SKIP_CURL=1 ./vendor/bin/phpunit --display-deprecations
 
-      - name: Run proxy tests
+      - name: Run proxy tests (with and without cURL)
         run: |
           docker run -d --name=tinyproxy -p 8888:8888 monokal/tinyproxy:latest ANY
           PROXY=http://0.0.0.0:8888 ./vendor/bin/phpunit
