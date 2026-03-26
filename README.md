@@ -25,6 +25,11 @@ You need an API key, which you can sign up for [here](https://opencagedata.com).
 
 You can find [a comprehensive tutorial for using this module on the OpenCage site](https://opencagedata.com/tutorials/geocode-in-php).
 
+## Working with AI / Agent Skill
+
+There is an [Agent Skill for working with the OpenCage Geocoding API](https://github.com/OpenCageData/opencage-skills/blob/master/opencage-geocoding-api/SKILL.md) which includes a reference file for developing in PHP using this library.
+
+
 ## Installation
 
 ### With Composer
