@@ -27,11 +27,25 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('invalid API key', $result['status']['message']);
     }
 
+    public function testInvalidHost()
+    {
+        // https://opencagedata.com/api#testingkeys
+        $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
+        try {
+            $geocoder->setHost('www.example.com');
+        } catch (\Exception $e) {
+            $this->assertEquals('Invalid host: must be localhost or an opencagedata.com subdomain', $e->getMessage());
+            return;
+        }
+        $this->fail();
+    }
+
     public function testNetworkRequestError()
     {
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
-        $result = $geocoder->geocode('London', ['host' => 'doesnotexist.opencagedata.com']);
+        $geocoder->setHost('doesnotexist.opencagedata.com');
+        $result = $geocoder->geocode('London');
         // print_r($result);
 
         $this->assertEquals(498, $result['status']['code']);

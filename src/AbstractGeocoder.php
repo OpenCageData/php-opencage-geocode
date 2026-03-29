@@ -22,6 +22,7 @@ abstract class AbstractGeocoder
             $this->setKey($key);
         }
         $this->setTimeout(self::TIMEOUT);
+        $this->url = self::URL;
         $this->user_agent = 'opencage-php/' . self::VERSION . ' (PHP ' . phpversion() . '; ' . php_uname('s') . ' ' . php_uname('r') . ')';
     }
 
@@ -37,7 +38,43 @@ abstract class AbstractGeocoder
 
     public function setProxy($proxy)
     {
+        $parsed = parse_url($proxy);
+        if (
+            $parsed === false
+            || !isset($parsed['scheme'])
+            || !in_array($parsed['scheme'], ['http', 'https', 'socks5'], true)
+            || !isset($parsed['host'])
+        ) {
+            throw new \Exception('Invalid proxy URL: must include a valid scheme (http, https, or socks5) and host');
+        }
         $this->proxy = $proxy;
+    }
+
+    public function setHost($host)
+    {
+        if (!$this->isValidHost($host)) {
+            throw new \Exception('Invalid host: must be localhost or an opencagedata.com subdomain');
+        }
+        $this->url = str_replace('api.opencagedata.com', $host, self::URL);
+    }
+
+    protected function isValidHost($host)
+    {
+        if (in_array($host, ['localhost', '127.0.0.1', '0.0.0.0', '::1'], true)) {
+            return true;
+        }
+
+        // localhost with port
+        if (preg_match('/^(localhost|127\.0\.0\.1|0\.0\.0\.0)\:\d+$/', $host)) {
+            return true;
+        }
+
+        // opencagedata.com or any subdomain
+        if (preg_match('/^([a-zA-Z0-9-]+\.)*opencagedata\.com$/', $host)) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getJSON($query)
@@ -55,18 +92,28 @@ abstract class AbstractGeocoder
 
     protected function getJSONByFopen($query)
     {
+        $httpOptions = [
+            'user_agent' => $this->user_agent,
+            'timeout' => $this->timeout
+        ];
+        if ($this->proxy) {
+            $httpOptions['proxy'] = $this->proxy;
+            $httpOptions['request_fulluri'] = true;
+        }
+
         $context = stream_context_create(
             [
-                'http' => [
-                    'user_agent' => $this->user_agent,
-                    'timeout' => $this->timeout
+                'http' => $httpOptions,
+                'ssl' => [
+                    'verify_peer' => true,
+                    'verify_peer_name' => true
                 ]
             ]
         );
 
         error_clear_last();
 
-        $ret = @file_get_contents($query);
+        $ret = @file_get_contents($query, false, $context);
         if ($ret === false) {
             if (function_exists('http_get_last_response_headers')) {
                 $http_response_header = http_get_last_response_headers();
@@ -117,7 +164,9 @@ abstract class AbstractGeocoder
         $options = [
             CURLOPT_TIMEOUT => $this->timeout,
             CURLOPT_URL => $query,
-            CURLOPT_RETURNTRANSFER => true
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2
         ];
         if ($this->proxy) {
             $options[CURLOPT_PROXY] = $this->proxy;
