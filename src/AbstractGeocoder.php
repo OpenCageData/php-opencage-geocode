@@ -83,6 +83,9 @@ abstract class AbstractGeocoder
             $ret = $this->getJSONByCurl($query);
             return $ret;
         } elseif (ini_get('allow_url_fopen')) {
+            if ($this->proxy) {
+                throw new \Exception('Proxy support requires the CURL extension');
+            }
             $ret = $this->getJSONByFopen($query);
             return $ret;
         } else {
@@ -92,18 +95,12 @@ abstract class AbstractGeocoder
 
     protected function getJSONByFopen($query)
     {
-        $httpOptions = [
-            'user_agent' => $this->user_agent,
-            'timeout' => $this->timeout
-        ];
-        if ($this->proxy) {
-            $httpOptions['proxy'] = $this->proxy;
-            $httpOptions['request_fulluri'] = true;
-        }
-
         $context = stream_context_create(
             [
-                'http' => $httpOptions,
+                'http' => [
+                    'user_agent' => $this->user_agent,
+                    'timeout' => $this->timeout
+                ],
                 'ssl' => [
                     'verify_peer' => true,
                     'verify_peer_name' => true

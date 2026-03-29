@@ -83,7 +83,11 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         }
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
-        $geocoder->setProxy($proxy);
+        try {
+            $geocoder->setProxy($proxy);
+        } catch (\Exception $e) {
+            $this->markTestSkipped('PROXY environment variable is not a valid proxy URL: ' . $proxy);
+        }
         $query = "82 Clerkenwell Road, London";
         $result = $geocoder->geocode($query);
 

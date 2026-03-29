@@ -4,7 +4,7 @@
 - host and proxy parameter have to be set before calling geocode(). Values are now
    stricter. In the last 30 days no customer used either option.
 - Explicitly enforce SSL certificate verification in both CURL and fopen.
-- Add proxy support to fopen fallback
+- Proxy now requires CURL extension; raises explicit error with fopen fallback
 - Fix stream context not being passed to file_get_contents
 
 3.3.4 -- Mon Dec 15 2025
