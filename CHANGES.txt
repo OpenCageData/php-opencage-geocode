@@ -1,5 +1,6 @@
 3.4.0 -- Sat Mar 29 2026
 =====================================================
+- deprecate PHP 8.1
 - URL encode API key and all query parameter names 
 - host and proxy parameter have to be set before calling geocode(). Values are now
    stricter. In the last 30 days no customer used either option.
