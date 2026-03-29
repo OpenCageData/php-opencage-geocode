@@ -88,11 +88,15 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         } catch (\Exception $e) {
             $this->markTestSkipped('PROXY environment variable is not a valid proxy URL: ' . $proxy);
         }
-        $query = "82 Clerkenwell Road, London";
-        $result = $geocoder->geocode($query);
 
-        // print_r($result);
+        if (getenv('SKIP_CURL')) {
+            $this->expectException(\Exception::class);
+            $this->expectExceptionMessage('Proxy support requires the CURL extension');
+            $geocoder->geocode("82 Clerkenwell Road, London");
+            return;
+        }
 
+        $result = $geocoder->geocode("82 Clerkenwell Road, London");
         $this->assertEquals(200, $result['status']['code']);
         $this->assertEquals('OK', $result['status']['message']);
     }
