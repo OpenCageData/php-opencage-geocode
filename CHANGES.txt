@@ -1,3 +1,13 @@
+3.4.0 -- Sat Mar 29 2026
+=====================================================
+- deprecate PHP 8.1
+- URL encode API key and all query parameter names 
+- host and proxy parameter have to be set before calling geocode(). Values are now
+   stricter. In the last 30 days no customer used either option.
+- Explicitly enforce SSL certificate verification in both CURL and fopen.
+- Proxy now requires CURL extension; raises explicit error with fopen fallback
+- Fix stream context not being passed to file_get_contents
+
 3.3.4 -- Mon Dec 15 2025
 =====================================================
 - removes deprecation warning when using PHP 8.5 on $http_response_header created by fopen (thanks to @TimWolla)

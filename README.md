@@ -89,7 +89,8 @@ if ($result && $result['total_results'] > 0) {
 ### Set a proxy URL
 
 ```php
-$geocoder->setProxy('http://proxy.example.com:1234');
+$geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');
+$geocoder->setProxy('https://proxy.example.com:1234');
 $result = $geocoder->geocode("Brandenburger Tor, Berlin");
 print_r($result['results'][0]['formatted']);
 // Brandenburger Tor, Unter den Linden, 10117 Berlin, Germany

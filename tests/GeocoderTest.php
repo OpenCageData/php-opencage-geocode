@@ -27,11 +27,25 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('invalid API key', $result['status']['message']);
     }
 
+    public function testInvalidHost()
+    {
+        // https://opencagedata.com/api#testingkeys
+        $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
+        try {
+            $geocoder->setHost('www.example.com');
+        } catch (\Exception $e) {
+            $this->assertEquals('Invalid host: must be localhost or an opencagedata.com subdomain', $e->getMessage());
+            return;
+        }
+        $this->fail();
+    }
+
     public function testNetworkRequestError()
     {
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
-        $result = $geocoder->geocode('London', ['host' => 'doesnotexist.opencagedata.com']);
+        $geocoder->setHost('doesnotexist.opencagedata.com');
+        $result = $geocoder->geocode('London');
         // print_r($result);
 
         $this->assertEquals(498, $result['status']['code']);
@@ -69,12 +83,20 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         }
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
-        $geocoder->setProxy($proxy);
-        $query = "82 Clerkenwell Road, London";
-        $result = $geocoder->geocode($query);
+        try {
+            $geocoder->setProxy($proxy);
+        } catch (\Exception $e) {
+            $this->markTestSkipped('PROXY environment variable is not a valid proxy URL: ' . $proxy);
+        }
 
-        // print_r($result);
+        if (getenv('SKIP_CURL')) {
+            $this->expectException(\Exception::class);
+            $this->expectExceptionMessage('Proxy support requires the CURL extension');
+            $geocoder->geocode("82 Clerkenwell Road, London");
+            return;
+        }
 
+        $result = $geocoder->geocode("82 Clerkenwell Road, London");
         $this->assertEquals(200, $result['status']['code']);
         $this->assertEquals('OK', $result['status']['message']);
     }

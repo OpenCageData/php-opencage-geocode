@@ -4,7 +4,7 @@ namespace OpenCage\Geocoder;
 
 abstract class AbstractGeocoder
 {
-    public const VERSION  = '3.3.4';  // if changing this => remember to match everything with the git tag
+    public const VERSION  = '3.4.0';  // if changing this => remember to match everything with the git tag
 
     public const TIMEOUT = 10;
     public const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
@@ -22,6 +22,7 @@ abstract class AbstractGeocoder
             $this->setKey($key);
         }
         $this->setTimeout(self::TIMEOUT);
+        $this->url = self::URL;
         $this->user_agent = 'opencage-php/' . self::VERSION . ' (PHP ' . phpversion() . '; ' . php_uname('s') . ' ' . php_uname('r') . ')';
     }
 
@@ -37,7 +38,43 @@ abstract class AbstractGeocoder
 
     public function setProxy($proxy)
     {
+        $parsed = parse_url($proxy);
+        if (
+            $parsed === false
+            || !isset($parsed['scheme'])
+            || !in_array($parsed['scheme'], ['http', 'https', 'socks5'], true)
+            || !isset($parsed['host'])
+        ) {
+            throw new \Exception('Invalid proxy URL: must include a valid scheme (http, https, or socks5) and host');
+        }
         $this->proxy = $proxy;
+    }
+
+    public function setHost($host)
+    {
+        if (!$this->isValidHost($host)) {
+            throw new \Exception('Invalid host: must be localhost or an opencagedata.com subdomain');
+        }
+        $this->url = str_replace('api.opencagedata.com', $host, self::URL);
+    }
+
+    protected function isValidHost($host)
+    {
+        if (in_array($host, ['localhost', '127.0.0.1', '0.0.0.0', '::1'], true)) {
+            return true;
+        }
+
+        // localhost with port
+        if (preg_match('/^(localhost|127\.0\.0\.1|0\.0\.0\.0)\:\d+$/', $host)) {
+            return true;
+        }
+
+        // opencagedata.com or any subdomain
+        if (preg_match('/^([a-zA-Z0-9-]+\.)*opencagedata\.com$/', $host)) {
+            return true;
+        }
+
+        return false;
     }
 
     protected function getJSON($query)
@@ -46,6 +83,9 @@ abstract class AbstractGeocoder
             $ret = $this->getJSONByCurl($query);
             return $ret;
         } elseif (ini_get('allow_url_fopen')) {
+            if ($this->proxy) {
+                throw new \Exception('Proxy support requires the CURL extension');
+            }
             $ret = $this->getJSONByFopen($query);
             return $ret;
         } else {
@@ -60,13 +100,17 @@ abstract class AbstractGeocoder
                 'http' => [
                     'user_agent' => $this->user_agent,
                     'timeout' => $this->timeout
+                ],
+                'ssl' => [
+                    'verify_peer' => true,
+                    'verify_peer_name' => true
                 ]
             ]
         );
 
         error_clear_last();
 
-        $ret = @file_get_contents($query);
+        $ret = @file_get_contents($query, false, $context);
         if ($ret === false) {
             if (function_exists('http_get_last_response_headers')) {
                 $http_response_header = http_get_last_response_headers();
@@ -117,7 +161,9 @@ abstract class AbstractGeocoder
         $options = [
             CURLOPT_TIMEOUT => $this->timeout,
             CURLOPT_URL => $query,
-            CURLOPT_RETURNTRANSFER => true
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_SSL_VERIFYPEER => true,
+            CURLOPT_SSL_VERIFYHOST => 2
         ];
         if ($this->proxy) {
             $options[CURLOPT_PROXY] = $this->proxy;
