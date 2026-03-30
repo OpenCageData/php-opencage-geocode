@@ -23,6 +23,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $geocoder = new Geocoder('invalid-APIKEY');
         $result = $geocoder->geocode('Johannesburg');
         // print_r($result);
+        $this->assertNotNull($result);
         $this->assertEquals(401, $result['status']['code']);
         $this->assertEquals('invalid API key', $result['status']['message']);
     }
@@ -48,6 +49,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $result = $geocoder->geocode('London');
         // print_r($result);
 
+        $this->assertNotNull($result);
         $this->assertEquals(498, $result['status']['code']);
         $this->assertStringContainsString('network issue', $result['status']['message']);
         $this->assertStringContainsString('doesnotexist.opencagedata.com', $result['status']['message']);
@@ -58,6 +60,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('4372eff77b8343cebfc843eb4da4ddc4');
         $result = $geocoder->geocode('Johannesburg');
+        $this->assertNotNull($result);
         $this->assertEquals(402, $result['status']['code']);
         $this->assertEquals('quota exceeded', $result['status']['message']);
     }
@@ -71,6 +74,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
 
         // print_r($result);
 
+        $this->assertNotNull($result);
         $this->assertEquals(200, $result['status']['code']);
         $this->assertEquals('OK', $result['status']['message']);
     }
@@ -90,6 +94,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         }
 
         $result = $geocoder->geocode("82 Clerkenwell Road, London");
+        $this->assertNotNull($result);
         $this->assertEquals(200, $result['status']['code']);
         $this->assertEquals('OK', $result['status']['message']);
     }
