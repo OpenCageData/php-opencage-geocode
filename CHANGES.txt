@@ -1,6 +1,7 @@
 unreleased
 =====================================================
 - replace internal use of fopen and cURL fallback with Guzzle library
+- add type declaration to all method parameters and return values
 
 3.4.0 -- Sat Mar 29 2026
 =====================================================
