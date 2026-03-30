@@ -148,6 +148,6 @@ class Geocoder
                             'message' => $message
                         ]
                     ];
-        return json_encode($response);
+        return (string) json_encode($response);
     }
 }
