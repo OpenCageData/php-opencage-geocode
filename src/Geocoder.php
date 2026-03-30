@@ -67,9 +67,9 @@ class Geocoder
 
     /**
      * @param array<string, string> $optParams
-     * @return ?array<string, mixed>
+     * @return array{status: array{code: int, message: string}, results: list<mixed>, total_results: int, ...}
      */
-    public function geocode(string $query, array $optParams = []): ?array
+    public function geocode(string $query, array $optParams = []): array
     {
         $url = $this->url . 'q=' . urlencode($query);
 
@@ -85,6 +85,10 @@ class Geocoder
         $url .= '&key=' . urlencode($this->key);
 
         $ret = json_decode($this->getJSON($url), true);
+        if (!is_array($ret)) {
+            throw new \Exception('Failed to decode API response');
+        }
+        /** @var array{status: array{code: int, message: string}, results: list<mixed>, total_results: int, ...} */
         return $ret;
     }
 
