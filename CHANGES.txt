@@ -1,3 +1,7 @@
+unreleased
+=====================================================
+- replace internal use of fopen and cURL fallback with Guzzle library
+
 3.4.0 -- Sat Mar 29 2026
 =====================================================
 - deprecate PHP 8.1
