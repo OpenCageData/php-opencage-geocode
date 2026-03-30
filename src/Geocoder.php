@@ -13,14 +13,14 @@ class Geocoder
     public const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
     public const PROXY = null;
 
-    protected $key;
-    protected $timeout;
-    protected $url;
-    protected $proxy;
-    protected $user_agent;
-    protected $client;
+    protected ?string $key = null;
+    protected int $timeout;
+    protected string $url;
+    protected ?string $proxy = null;
+    protected string $user_agent;
+    protected ?Client $client = null;
 
-    public function __construct($key = null)
+    public function __construct(?string $key = null)
     {
         if (isset($key) && !empty($key)) {
             $this->setKey($key);
@@ -30,18 +30,18 @@ class Geocoder
         $this->user_agent = 'opencage-php/' . self::VERSION . ' (PHP ' . phpversion() . '; ' . php_uname('s') . ' ' . php_uname('r') . ')';
     }
 
-    public function setKey($key)
+    public function setKey(string $key): void
     {
         $this->key = $key;
     }
 
-    public function setTimeout($timeout)
+    public function setTimeout(int $timeout): void
     {
         $this->timeout = $timeout;
         $this->client = null;
     }
 
-    public function setProxy($proxy)
+    public function setProxy(string $proxy): void
     {
         $parsed = parse_url($proxy);
         if (
@@ -56,7 +56,7 @@ class Geocoder
         $this->client = null;
     }
 
-    public function setHost($host)
+    public function setHost(string $host): void
     {
         if (!$this->isValidHost($host)) {
             throw new \Exception('Invalid host: must be localhost or an opencagedata.com subdomain');
@@ -65,11 +65,15 @@ class Geocoder
         $this->client = null;
     }
 
-    public function geocode($query, $optParams = [])
+    /**
+     * @param array<string, string> $optParams
+     * @return ?array<string, mixed>
+     */
+    public function geocode(string $query, array $optParams = []): ?array
     {
         $url = $this->url . 'q=' . urlencode($query);
 
-        if (is_array($optParams) && !empty($optParams)) {
+        if (!empty($optParams)) {
             foreach ($optParams as $param => $paramValue) {
                 $url .= '&' . urlencode($param) . '=' . urlencode($paramValue);
             }
@@ -84,7 +88,7 @@ class Geocoder
         return $ret;
     }
 
-    protected function isValidHost($host)
+    protected function isValidHost(string $host): bool
     {
         if (in_array($host, ['localhost', '127.0.0.1', '0.0.0.0', '::1'], true)) {
             return true;
@@ -103,7 +107,7 @@ class Geocoder
         return false;
     }
 
-    protected function buildClient()
+    protected function buildClient(): Client
     {
         $config = [
             'timeout' => $this->timeout,
@@ -120,7 +124,7 @@ class Geocoder
         return new Client($config);
     }
 
-    protected function getJSON($query)
+    protected function getJSON(string $query): string
     {
         if ($this->client === null) {
             $this->client = $this->buildClient();
@@ -134,7 +138,7 @@ class Geocoder
         }
     }
 
-    protected function generateErrorJSON($code, $message)
+    protected function generateErrorJSON(int $code, string $message): string
     {
         $response = [
                         'results' => [],

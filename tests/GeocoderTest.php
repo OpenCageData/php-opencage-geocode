@@ -6,7 +6,7 @@ use OpenCage\Geocoder\Geocoder;
 
 class GeocoderTest extends \PHPUnit\Framework\TestCase
 {
-    public function testMissingKey()
+    public function testMissingKey(): void
     {
         $geocoder = new Geocoder();
         try {
@@ -18,7 +18,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->fail();
     }
 
-    public function testInvalidKey()
+    public function testInvalidKey(): void
     {
         $geocoder = new Geocoder('invalid-APIKEY');
         $result = $geocoder->geocode('Johannesburg');
@@ -27,7 +27,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('invalid API key', $result['status']['message']);
     }
 
-    public function testInvalidHost()
+    public function testInvalidHost(): void
     {
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
@@ -40,7 +40,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->fail();
     }
 
-    public function testNetworkRequestError()
+    public function testNetworkRequestError(): void
     {
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
@@ -53,7 +53,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('doesnotexist.opencagedata.com', $result['status']['message']);
     }
 
-    public function testOverQuota()
+    public function testOverQuota(): void
     {
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('4372eff77b8343cebfc843eb4da4ddc4');
@@ -62,7 +62,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('quota exceeded', $result['status']['message']);
     }
 
-    public function testLondon()
+    public function testLondon(): void
     {
         // https://opencagedata.com/api#testingkeys
         $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
@@ -75,7 +75,7 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('OK', $result['status']['message']);
     }
 
-    public function testProxy()
+    public function testProxy(): void
     {
         $proxy = getenv('PROXY');
         if (!$proxy) {
