@@ -9,13 +9,8 @@ A [PHP](http://php.net/) library to use the [OpenCage geocoding API](https://ope
 ![Mastodon Follow](https://img.shields.io/mastodon/follow/109287663468501769?domain=https%3A%2F%2Fen.osm.town%2F&style=social)
 
 ## Overview
-This library attempts to use the [CURL](http://www.php.net/manual/en/book.curl.php)
-extension to access the OpenCage Geocoding API. If CURL support is not available, the
-library falls back to using [fopen wrappers](http://uk3.php.net/manual/en/filesystem.configuration.php#ini.allow-url-fopen).
-
-To use the library you must either have the CURL extension compiled into your version
-of PHP. Alternatively configure the use of fopen wrappers via the `allow_url_fopen`
-directive in your `php.ini`.
+This library uses [Guzzle](https://docs.guzzlephp.org/en/stable/) to access the
+OpenCage Geocoding API. Both synchronous and asynchronous requests are supported.
 
 ### Authentication
 
@@ -84,6 +79,28 @@ if ($result && $result['total_results'] > 0) {
   print $first['geometry']['lng'] . ';' . $first['geometry']['lat'] . ';' . $first['formatted'] . "\n";
   // 4.360081;43.8316276;6 Rue Massillon, 30020 Nîmes, Frankreich
 }
+```
+
+### Async geocoding
+
+```php
+$geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');
+
+// single async request
+$promise = $geocoder->geocodeAsync('82 Clerkenwell Road, London');
+$result = $promise->wait();
+print_r($result);
+
+// concurrent requests
+$promises = [
+    'london' => $geocoder->geocodeAsync('London'),
+    'paris'  => $geocoder->geocodeAsync('Paris'),
+    'tokyo'  => $geocoder->geocodeAsync('Tokyo'),
+];
+$results = \GuzzleHttp\Promise\Utils::unwrap($promises);
+print $results['london']['results'][0]['formatted'];
+print $results['paris']['results'][0]['formatted'];
+print $results['tokyo']['results'][0]['formatted'];
 ```
 
 ### Set a proxy URL

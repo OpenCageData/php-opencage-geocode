@@ -75,6 +75,31 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('OK', $result['status']['message']);
     }
 
+    public function testAsyncLondon(): void
+    {
+        // https://opencagedata.com/api#testingkeys
+        $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
+        $promise = $geocoder->geocodeAsync("82 Clerkenwell Road, London");
+        /** @var array{status: array{code: int, message: string}} $result */
+        $result = $promise->wait();
+
+        $this->assertEquals(200, $result['status']['code']);
+        $this->assertEquals('OK', $result['status']['message']);
+    }
+
+    public function testAsyncNetworkError(): void
+    {
+        // https://opencagedata.com/api#testingkeys
+        $geocoder = new Geocoder('6d0e711d72d74daeb2b0bfd2a5cdfdba');
+        $geocoder->setHost('doesnotexist.opencagedata.com');
+        $promise = $geocoder->geocodeAsync('London');
+        /** @var array{status: array{code: int, message: string}} $result */
+        $result = $promise->wait();
+
+        $this->assertEquals(498, $result['status']['code']);
+        $this->assertStringContainsString('network issue', $result['status']['message']);
+    }
+
     public function testProxy(): void
     {
         $proxy = getenv('PROXY');

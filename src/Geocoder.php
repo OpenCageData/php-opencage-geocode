@@ -4,6 +4,7 @@ namespace OpenCage\Geocoder;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Promise\PromiseInterface;
 
 class Geocoder
 {
@@ -71,6 +72,43 @@ class Geocoder
      */
     public function geocode(string $query, array $optParams = []): array
     {
+        $url = $this->buildUrl($query, $optParams);
+
+        $ret = json_decode($this->getJSON($url), true);
+        if (!is_array($ret)) {
+            throw new \Exception('Failed to decode API response');
+        }
+        /** @var array{status: array{code: int, message: string}, results: list<mixed>, total_results: int, ...} */
+        return $ret;
+    }
+
+    /** @param array<string, string> $optParams */
+    public function geocodeAsync(string $query, array $optParams = []): PromiseInterface
+    {
+        $url = $this->buildUrl($query, $optParams);
+
+        if ($this->client === null) {
+            $this->client = $this->buildClient();
+        }
+
+        return $this->client->getAsync($url, ['http_errors' => false])
+            ->then(function (\Psr\Http\Message\ResponseInterface $response) {
+                $ret = json_decode((string) $response->getBody(), true);
+                if (!is_array($ret)) {
+                    throw new \Exception('Failed to decode API response');
+                }
+                return $ret;
+            }, function (\Throwable $e) {
+                if ($e instanceof ConnectException) {
+                    return json_decode($this->generateErrorJSON(498, 'network issue ' . $e->getMessage()), true);
+                }
+                throw $e;
+            });
+    }
+
+    /** @param array<string, string> $optParams */
+    protected function buildUrl(string $query, array $optParams = []): string
+    {
         $url = $this->url . 'q=' . urlencode($query);
 
         if (!empty($optParams)) {
@@ -84,12 +122,7 @@ class Geocoder
         }
         $url .= '&key=' . urlencode($this->key);
 
-        $ret = json_decode($this->getJSON($url), true);
-        if (!is_array($ret)) {
-            throw new \Exception('Failed to decode API response');
-        }
-        /** @var array{status: array{code: int, message: string}, results: list<mixed>, total_results: int, ...} */
-        return $ret;
+        return $url;
     }
 
     protected function isValidHost(string $host): bool
