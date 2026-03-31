@@ -89,6 +89,52 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
         $this->assertStringContainsString('disabled', $result['status']['message']);
     }
 
+    // https://opencagedata.com/api#testingkeys - query 'NOWHERE-INTERESTING' returns 200 with zero results
+    public function testNoResults(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $result = $geocoder->geocode('NOWHERE-INTERESTING');
+        $this->assertEquals(200, $result['status']['code']);
+        $this->assertEquals(0, $result['total_results']);
+        $this->assertEmpty($result['results']);
+    }
+
+    public function testWithOptionalParams(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $result = $geocoder->geocode('82 Clerkenwell Road, London', [
+            'language' => 'fr',
+            'countrycode' => 'gb'
+        ]);
+        $this->assertEquals(200, $result['status']['code']);
+    }
+
+    public function testReverseGeocode(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $result = $geocoder->geocode('51.5227,-0.1025');
+        $this->assertEquals(200, $result['status']['code']);
+        $this->assertGreaterThan(0, $result['total_results']);
+    }
+
+    public function testInvalidProxy(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid proxy URL');
+        $geocoder->setProxy('not-a-valid-proxy');
+    }
+
+    public function testSetTimeout(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $geocoder->setTimeout(1);
+        $geocoder->setHost('doesnotexist.opencagedata.com');
+        $result = $geocoder->geocode('London');
+        $this->assertEquals(498, $result['status']['code']);
+        $this->assertStringContainsString('network issue', $result['status']['message']);
+    }
+
     public function testLondon(): void
     {
         $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
@@ -122,6 +168,36 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(498, $result['status']['code']);
         $this->assertStringContainsString('network issue', $result['status']['message']);
+    }
+
+    public function testAsyncOverQuota(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_402);
+        $promise = $geocoder->geocodeAsync('Johannesburg');
+        /** @var array{status: array{code: int, message: string}} $result */
+        $result = $promise->wait();
+
+        $this->assertEquals(402, $result['status']['code']);
+        $this->assertEquals('quota exceeded', $result['status']['message']);
+    }
+
+    public function testAsyncDisabledKey(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_403_DISABLED);
+        $promise = $geocoder->geocodeAsync('Johannesburg');
+        /** @var array{status: array{code: int, message: string}} $result */
+        $result = $promise->wait();
+
+        $this->assertEquals(403, $result['status']['code']);
+        $this->assertStringContainsString('disabled', $result['status']['message']);
+    }
+
+    public function testAsyncMissingKey(): void
+    {
+        $geocoder = new Geocoder();
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing API key');
+        $geocoder->geocodeAsync('London');
     }
 
     public function testProxy(): void
