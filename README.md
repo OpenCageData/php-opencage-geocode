@@ -59,7 +59,7 @@ print_r($result);
 
 ```php
 $geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');
-$result = $geocoder->geocode('43.831,4.360'); # latitude,longitude (y,x)
+$result = $geocoder->geocodeReverse(43.831, 4.360); # latitude, longitude
 print $result['results'][0]['formatted'];
 // 3 Rue de Rivarol, 30020 Nîmes, France
 ```
@@ -101,6 +101,11 @@ $results = \GuzzleHttp\Promise\Utils::unwrap($promises);
 print $results['london']['results'][0]['formatted'];
 print $results['paris']['results'][0]['formatted'];
 print $results['tokyo']['results'][0]['formatted'];
+
+// async reverse geocoding
+$promise = $geocoder->geocodeReverseAsync(43.831, 4.360);
+$result = $promise->wait();
+print $result['results'][0]['formatted'];
 ```
 
 ### Set a proxy URL

@@ -112,9 +112,27 @@ class GeocoderTest extends \PHPUnit\Framework\TestCase
     public function testReverseGeocode(): void
     {
         $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
-        $result = $geocoder->geocode('51.5227,-0.1025');
+        $result = $geocoder->geocodeReverse(51.5227, -0.1025);
         $this->assertEquals(200, $result['status']['code']);
         $this->assertGreaterThan(0, $result['total_results']);
+    }
+
+    public function testReverseGeocodeWithStrings(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $result = $geocoder->geocodeReverse('51.5227', '-0.1025');
+        $this->assertEquals(200, $result['status']['code']);
+        $this->assertGreaterThan(0, $result['total_results']);
+    }
+
+    public function testReverseGeocodeAsync(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $promise = $geocoder->geocodeReverseAsync(51.5227, -0.1025);
+        /** @var array{status: array{code: int, message: string}} $result */
+        $result = $promise->wait();
+
+        $this->assertEquals(200, $result['status']['code']);
     }
 
     public function testInvalidProxy(): void

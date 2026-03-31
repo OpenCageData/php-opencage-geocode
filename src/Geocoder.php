@@ -82,6 +82,21 @@ class Geocoder
         return $ret;
     }
 
+    /**
+     * @param array<string, string> $optParams
+     * @return array{status: array{code: int, message: string}, results: list<mixed>, total_results: int, ...}
+     */
+    public function geocodeReverse(float|string $latitude, float|string $longitude, array $optParams = []): array
+    {
+        return $this->geocode($latitude . ',' . $longitude, $optParams);
+    }
+
+    /** @param array<string, string> $optParams */
+    public function geocodeReverseAsync(float|string $latitude, float|string $longitude, array $optParams = []): PromiseInterface
+    {
+        return $this->geocodeAsync($latitude . ',' . $longitude, $optParams);
+    }
+
     /** @param array<string, string> $optParams */
     public function geocodeAsync(string $query, array $optParams = []): PromiseInterface
     {
