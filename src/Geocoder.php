@@ -18,7 +18,7 @@ class Geocoder
     protected int $timeout;
     protected string $url;
     protected ?string $proxy = null;
-    protected string $user_agent;
+    protected readonly string $user_agent;
     protected ?Client $client = null;
 
     public function __construct(?string $key = null)
