@@ -115,7 +115,7 @@ class Geocoder
                 return $ret;
             }, function (\Throwable $e) {
                 if ($e instanceof ConnectException) {
-                    return json_decode($this->generateErrorJSON(498, 'network issue ' . $e->getMessage()), true);
+                    return json_decode($this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($e->getMessage())), true);
                 }
                 throw $e;
             });
@@ -186,8 +186,13 @@ class Geocoder
             $response = $this->client->get($query, ['http_errors' => false]);
             return (string) $response->getBody();
         } catch (ConnectException $e) {
-            return $this->generateErrorJSON(498, 'network issue ' . $e->getMessage());
+            return $this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($e->getMessage()));
         }
+    }
+
+    protected function sanitizeMessage(string $message): string
+    {
+        return (string) preg_replace('/([?&])key=([a-zA-Z0-9]{6})[^&]*/', '$1key=$2...REDACTED', $message);
     }
 
     protected function generateErrorJSON(int $code, string $message): string
