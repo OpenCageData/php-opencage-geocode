@@ -14,6 +14,11 @@
       "OpenCage\\Geocoder\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "OpenCage\\Geocoder\\Test\\": "tests"
+    }
+  },
   "require": {
     "php": ">=8.2",
     "guzzlehttp/guzzle": "^7.0"
