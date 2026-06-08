@@ -3,6 +3,7 @@
 namespace OpenCage\Geocoder\Test;
 
 use OpenCage\Geocoder\Geocoder;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 class NetworkTest extends TestCase
 {
@@ -40,12 +41,24 @@ class NetworkTest extends TestCase
         $this->assertStringContainsString('network issue', $result['status']['message']);
     }
 
-    public function testInvalidProxy(): void
+    /** @return array<string, array{string}> */
+    public static function invalidProxyProvider(): array
+    {
+        return [
+            'garbage string'     => ['not-a-valid-proxy'],
+            'missing scheme'     => ['//example.com:8080'],
+            'unsupported scheme' => ['ftp://example.com:8080'],
+            'empty host'         => ['http:'],
+        ];
+    }
+
+    #[DataProvider('invalidProxyProvider')]
+    public function testInvalidProxy(string $proxy): void
     {
         $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Invalid proxy URL');
-        $geocoder->setProxy('not-a-valid-proxy');
+        $geocoder->setProxy($proxy);
     }
 
     public function testProxy(): void
