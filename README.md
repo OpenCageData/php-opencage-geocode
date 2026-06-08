@@ -27,6 +27,8 @@ There is an [Agent Skill for working with the OpenCage Geocoding API](https://gi
 
 ## Installation
 
+Requires PHP 8.2 or newer.
+
 ### With Composer
 
 The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/).
@@ -108,7 +110,19 @@ $result = $promise->wait();
 print $result['results'][0]['formatted'];
 ```
 
+## Configuration
+
+### Set a timeout
+
+```php
+$geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');
+$geocoder->setTimeout(5); // seconds, default is 10
+$result = $geocoder->geocode('82 Clerkenwell Road, London');
+```
+
 ### Set a proxy URL
+
+The proxy URL must include a scheme (`http`, `https`, or `socks5`) and a host.
 
 ```php
 $geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');
