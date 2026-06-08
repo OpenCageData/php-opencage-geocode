@@ -27,6 +27,7 @@ class NetworkTest extends TestCase
         $this->assertEquals(498, $result['status']['code']);
         $this->assertStringContainsString('network issue', $result['status']['message']);
         $this->assertStringContainsString('doesnotexist.opencagedata.com', $result['status']['message']);
+        $this->assertStringNotContainsString(self::OPENCAGE_TEST_APIKEY_200, $result['status']['message']);
     }
 
     public function testSetTimeout(): void
