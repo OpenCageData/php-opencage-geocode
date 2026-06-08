@@ -14,8 +14,14 @@
       "OpenCage\\Geocoder\\": "src"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "OpenCage\\Geocoder\\Test\\": "tests"
+    }
+  },
   "require": {
-    "php": ">=8.2"
+    "php": ">=8.2",
+    "guzzlehttp/guzzle": "^7.0"
   },
   "require-dev": {
     "phpunit/phpunit": "^12.5.8",
@@ -24,13 +30,11 @@
   },
   "scripts": {
     "test": "phpunit --display-deprecations",
-    "test:nocurl": "SKIP_CURL=1 phpunit --display-deprecations",
     "phpcs": "phpcs .",
     "phpstan": "phpstan analyse",
     "check": [
       "composer validate --strict",
       "@test",
-      "@test:nocurl",
       "@phpcs",
       "@phpstan"
     ]

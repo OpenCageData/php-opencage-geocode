@@ -1,7 +1,6 @@
 parameters:
-    level: 5
+    level: 10
     paths:
         - src
         - tests
         - demo
-    reportUnmatchedIgnoredErrors: false

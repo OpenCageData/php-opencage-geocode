@@ -35,16 +35,13 @@ jobs:
           if [ "${{ matrix.php-version }}" != "8.5" ]; then rm composer.lock; fi
           composer install --no-progress --no-suggest --no-interaction
 
-      - name: Run phpunit tests (with and without cURL)
-        run: |
-          ./vendor/bin/phpunit --display-deprecations
-          SKIP_CURL=1 ./vendor/bin/phpunit --display-deprecations
+      - name: Run phpunit tests
+        run: ./vendor/bin/phpunit --display-deprecations
 
-      - name: Run proxy tests (with and without cURL)
+      - name: Run proxy tests
         run: |
           docker run -d --name=tinyproxy -p 8888:8888 monokal/tinyproxy:latest ANY
           PROXY=http://0.0.0.0:8888 ./vendor/bin/phpunit
-          PROXY=http://0.0.0.0:8888 SKIP_CURL=1 ./vendor/bin/phpunit
           docker rm -f tinyproxy
 
       - name: Run PHPCS (Code Sniffer)
