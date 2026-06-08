@@ -8,7 +8,7 @@ use GuzzleHttp\Promise\PromiseInterface;
 
 class Geocoder
 {
-    public const VERSION  = '3.4.0';  // if changing this => remember to match everything with the git tag
+    public const VERSION  = '4.0.0';  // if changing this => remember to match everything with the git tag
 
     public const TIMEOUT = 10;
     public const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
