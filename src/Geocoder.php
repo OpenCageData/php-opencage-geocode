@@ -146,13 +146,15 @@ class Geocoder
             return true;
         }
 
+        // \z rather than $, which would also accept a trailing newline
+
         // localhost with port
-        if (preg_match('/^(localhost|127\.0\.0\.1|0\.0\.0\.0)\:\d+$/', $host)) {
+        if (preg_match('/^(localhost|127\.0\.0\.1|0\.0\.0\.0)\:\d+\z/', $host)) {
             return true;
         }
 
         // opencagedata.com or any subdomain
-        if (preg_match('/^([a-zA-Z0-9-]+\.)*opencagedata\.com$/', $host)) {
+        if (preg_match('/^([a-zA-Z0-9-]+\.)*opencagedata\.com\z/', $host)) {
             return true;
         }
 
@@ -192,6 +194,8 @@ class Geocoder
 
     protected function sanitizeMessage(string $message): string
     {
+        // API keys are 32-character hex strings, which urlencode() leaves unchanged,
+        // so matching the first 6 characters as alphanumeric covers every valid key
         return (string) preg_replace('/([?&])key=([a-zA-Z0-9]{6})[^&]*/', '$1key=$2...REDACTED', $message);
     }
 

@@ -1,3 +1,6 @@
+unreleased
+- tighten checks for invalid hosts
+
 4.0.2 -- Fri Aug 7 2026
 =====================================================
 - update guzzle dependency (7.12.1 => 7.15.3)

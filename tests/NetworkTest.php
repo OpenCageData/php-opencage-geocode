@@ -7,11 +7,22 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 class NetworkTest extends TestCase
 {
-    public function testInvalidHost(): void
+    /** @return array<string, array{string}> */
+    public static function invalidHostProvider(): array
+    {
+        return [
+            'other domain'                     => ['www.example.com'],
+            'subdomain, trailing newline'      => ["api.opencagedata.com\n"],
+            'localhost:port, trailing newline' => ["localhost:8080\n"],
+        ];
+    }
+
+    #[DataProvider('invalidHostProvider')]
+    public function testInvalidHost(string $host): void
     {
         $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
         try {
-            $geocoder->setHost('www.example.com');
+            $geocoder->setHost($host);
         } catch (\Exception $e) {
             $this->assertEquals('Invalid host: must be localhost or an opencagedata.com subdomain', $e->getMessage());
             return;
