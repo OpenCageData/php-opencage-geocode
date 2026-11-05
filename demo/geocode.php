@@ -1,11 +1,12 @@
 <?php
 
-include(dirname(__DIR__) . '/src/Geocoder.php');
+// run `composer install` in the repository root first
+require dirname(__DIR__) . '/vendor/autoload.php';
 
-// use OpenCage\Geocoder;
+use OpenCage\Geocoder\Geocoder;
 
 $query = "82 Clerkenwell Road, London";
 $key = getenv('OPENCAGE_API_KEY') ?: null;
-$geocoder = new OpenCage\Geocoder\Geocoder($key);
+$geocoder = new Geocoder($key);
 $result = $geocoder->geocode($query);
 print_r($result);

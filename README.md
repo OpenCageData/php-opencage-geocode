@@ -31,7 +31,7 @@ Requires PHP 8.2 or newer.
 
 ### With Composer
 
-The recommended - and easiest way - to install is via [Composer](https://getcomposer.org/).
+Install via [Composer](https://getcomposer.org/).
 Require the library in your project's `composer.json` file.
 
 ```php
@@ -44,9 +44,7 @@ Import the Geocoder class.
 require "vendor/autoload.php";
 ```
 
-### The old fashioned way
-
-See the file `demo/geocode.php`
+A complete runnable example is in `demo/geocode.php`.
 
 
 ## Geocoding

@@ -1,5 +1,7 @@
 unreleased
 - tighten checks for invalid hosts
+- fix demo/geocode.php, broken since 4.0.0: it now loads Composer's autoloader.
+   Installing without Composer is no longer possible (Guzzle dependency)
 
 4.0.2 -- Fri Aug 7 2026
 =====================================================
