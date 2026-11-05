@@ -35,11 +35,16 @@ jobs:
       - name: Run phpunit tests
         run: ./vendor/bin/phpunit --display-deprecations
 
-      - name: Run proxy tests
+      - name: Start tinyproxy
         run: |
-          docker run -d --name=tinyproxy -p 8888:8888 monokal/tinyproxy:latest ANY
-          PROXY=http://0.0.0.0:8888 ./vendor/bin/phpunit
-          docker rm -f tinyproxy
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq tinyproxy
+          # Ubuntu's default config listens on port 8888 and allows connections from localhost
+          sudo systemctl start tinyproxy
+          timeout 10 bash -c 'until (echo > /dev/tcp/127.0.0.1/8888) 2>/dev/null; do sleep 1; done'
+
+      - name: Run proxy tests
+        run: PROXY=http://127.0.0.1:8888 ./vendor/bin/phpunit
 
       - name: Run PHPCS (Code Sniffer)
         run: ./vendor/bin/phpcs .
