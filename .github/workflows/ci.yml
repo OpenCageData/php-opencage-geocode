@@ -15,6 +15,10 @@ jobs:
       matrix:
         # https://www.php.net/supported-versions.php
         php-version: ["8.3", "8.4", "8.5"]
+        dependencies: ["default"]
+        include:
+          - php-version: "8.3"
+            dependencies: "lowest"
 
     name: PHP OpenCage Geocode
 
@@ -33,9 +37,17 @@ jobs:
           coverage: none
 
       - name: Install dependencies
+        if: matrix.dependencies == 'default'
         run: |
           if [ "${{ matrix.php-version }}" != "8.5" ]; then rm composer.lock; fi
           composer install --no-progress --no-suggest --no-interaction
+
+      - name: Install lowest supported Guzzle
+        if: matrix.dependencies == 'lowest'
+        run: composer update guzzlehttp/guzzle --with-all-dependencies --prefer-lowest --prefer-stable --no-progress --no-interaction
+
+      - name: Show installed Guzzle
+        run: composer show 'guzzlehttp/*'
 
       - name: Run phpunit tests
         run: ./vendor/bin/phpunit --display-deprecations
