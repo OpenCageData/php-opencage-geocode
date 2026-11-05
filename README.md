@@ -77,7 +77,7 @@ $result = $geocoder->geocode('6 Rue Massillon, 30020 Nîmes, France', [
 if ($result && $result['total_results'] > 0) {
   $first = $result['results'][0];
   print $first['geometry']['lng'] . ';' . $first['geometry']['lat'] . ';' . $first['formatted'] . "\n";
-  // 4.360081;43.8316276;6 Rue Massillon, 30020 Nîmes, Frankreich
+  // 4.360081;43.8316276;6 Rue Massillon, 30020 Nîmes, France
 }
 ```
 
