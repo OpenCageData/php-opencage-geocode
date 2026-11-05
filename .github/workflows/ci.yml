@@ -61,7 +61,7 @@ jobs:
           timeout 10 bash -c 'until (echo > /dev/tcp/127.0.0.1/8888) 2>/dev/null; do sleep 1; done'
 
       - name: Run proxy tests
-        run: PROXY=http://127.0.0.1:8888 ./vendor/bin/phpunit
+        run: PROXY=http://127.0.0.1:8888 ./vendor/bin/phpunit --filter testProxy --fail-on-skipped --fail-on-empty-test-suite
 
       - name: Run PHPCS (Code Sniffer)
         run: ./vendor/bin/phpcs .
