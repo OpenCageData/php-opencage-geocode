@@ -27,7 +27,7 @@ There is an [Agent Skill for working with the OpenCage Geocoding API](https://gi
 
 ## Installation
 
-Requires PHP 8.2 or newer.
+Requires PHP 8.3 or newer.
 
 ### With Composer
 

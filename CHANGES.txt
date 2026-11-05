@@ -1,5 +1,7 @@
 4.1.0 -- Thu Nov 5 2026 
 =====================================================
+- require PHP 8.3 or newer. PHP 8.2 security support ends on 2026-12-31.
+   On PHP 8.2, Composer keeps installing 4.0.x
 - support Guzzle 8. Like with Guzzle 7 network errors and timeouts return status 498
 - tighten checks for invalid hosts
 - fix demo/geocode.php, broken since 4.0.0: it now loads Composer's autoloader.
