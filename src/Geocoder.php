@@ -3,8 +3,10 @@
 namespace OpenCage\Geocoder;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Client\NetworkExceptionInterface;
 
 class Geocoder
 {
@@ -113,11 +115,11 @@ class Geocoder
                     throw new \Exception('Failed to decode API response');
                 }
                 return $ret;
-            }, function (\Throwable $e) {
-                if ($e instanceof ConnectException) {
-                    return json_decode($this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($e->getMessage())), true);
+            }, function (mixed $reason) {
+                if ($reason instanceof \Throwable && $this->isNetworkError($reason)) {
+                    return json_decode($this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($reason->getMessage())), true);
                 }
-                throw $e;
+                return Create::rejectionFor($reason);
             });
     }
 
@@ -192,9 +194,21 @@ class Geocoder
         try {
             $response = $this->client->get($query, ['http_errors' => false]);
             return (string) $response->getBody();
-        } catch (ConnectException $e) {
-            return $this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($e->getMessage()));
+        } catch (GuzzleException $e) {
+            if ($this->isNetworkError($e)) {
+                return $this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($e->getMessage()));
+            }
+            throw $e;
         }
+    }
+
+    protected function isNetworkError(\Throwable $e): bool
+    {
+        // Guzzle 7 throws ConnectException for all connection problems and timeouts.
+        // Guzzle 8 adds NetworkException, and ResponseTimeoutException for timeouts
+        // after the response headers arrived; that class doesn't exist in Guzzle 7.
+        return $e instanceof NetworkExceptionInterface
+            || is_a($e, 'GuzzleHttp\Exception\ResponseTimeoutException');
     }
 
     protected function sanitizeMessage(string $message): string
