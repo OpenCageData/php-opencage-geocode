@@ -128,6 +128,11 @@ class Geocoder
 
         if (!empty($optParams)) {
             foreach ($optParams as $param => $paramValue) {
+                // the API reads parameter names case-insensitively and uses the first 'key' it finds,
+                // so an optional 'key' (or 'KEY') would replace the configured API key
+                if (in_array(strtolower($param), ['q', 'key'], true)) {
+                    continue;
+                }
                 $url .= '&' . urlencode($param) . '=' . urlencode($paramValue);
             }
         }
