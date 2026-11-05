@@ -6,9 +6,6 @@ on:
   schedule:
     - cron: "15 22 2 * *"
 
-env:
-  OPENCAGE_API_KEY: ${{ secrets.GEO_CODER_OPENCAGE_API_KEY }}
-
 jobs:
   test:
     strategy:
