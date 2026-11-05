@@ -40,7 +40,7 @@ jobs:
         if: matrix.dependencies == 'default'
         run: |
           if [ "${{ matrix.php-version }}" != "8.5" ]; then rm composer.lock; fi
-          composer install --no-progress --no-suggest --no-interaction
+          composer install --no-progress --no-interaction
 
       - name: Install lowest supported Guzzle
         if: matrix.dependencies == 'lowest'
