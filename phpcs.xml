@@ -8,7 +8,6 @@
   <rule ref="PSR12" />
 
   <exclude-pattern>./vendor/</exclude-pattern>
-  <exclude-pattern>./tests/bootstrap.php</exclude-pattern>
 
   <!-- default 120 -->
   <rule ref="Generic.Files.LineLength">
