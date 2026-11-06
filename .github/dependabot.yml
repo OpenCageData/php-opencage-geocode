@@ -4,3 +4,12 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    ignore:
+      - dependency-name: "guzzlehttp/guzzle"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "phpunit/phpunit"
+        update-types: ["version-update:semver-major"]
