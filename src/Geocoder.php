@@ -173,6 +173,7 @@ class Geocoder
         $config = [
             'timeout' => $this->timeout,
             'verify' => true,
+            'allow_redirects' => false,
             'headers' => [
                 'User-Agent' => $this->user_agent,
             ],

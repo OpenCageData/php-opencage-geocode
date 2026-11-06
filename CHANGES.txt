@@ -10,6 +10,7 @@
    Before, an optional 'key' replaced the configured API key, because the API
    uses the first 'key' parameter and reads parameter names case-insensitively.
 - setProxy() also accepts socks5h:// proxy URLs, where the proxy resolves the hostname
+- HTTP redirects are no longer followed. The API doesn't send any
 - tests: explicitly test against lowest supported PHP and Guzzle ("prefer-lowest")
 
 4.0.2 -- Fri Aug 7 2026
