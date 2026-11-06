@@ -9,6 +9,7 @@
 - optional parameters named 'q' or 'key' (in any letter case) are now ignored.
    Before, an optional 'key' replaced the configured API key, because the API
    uses the first 'key' parameter and reads parameter names case-insensitively.
+- setProxy() also accepts socks5h:// proxy URLs, where the proxy resolves the hostname
 - tests: explicitly test against lowest supported PHP and Guzzle ("prefer-lowest")
 
 4.0.2 -- Fri Aug 7 2026

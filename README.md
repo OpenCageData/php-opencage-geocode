@@ -120,7 +120,8 @@ $result = $geocoder->geocode('82 Clerkenwell Road, London');
 
 ### Set a proxy URL
 
-The proxy URL must include a scheme (`http`, `https`, or `socks5`) and a host.
+The proxy URL must include a scheme (`http`, `https`, `socks5` or `socks5h`) and a host.
+With `socks5h`, the proxy also resolves the hostname, so no DNS lookup happens outside the proxy.
 
 ```php
 $geocoder = new \OpenCage\Geocoder\Geocoder('YOUR-API-KEY');

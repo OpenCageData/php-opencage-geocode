@@ -148,6 +148,25 @@ class NetworkTest extends TestCase
         $geocoder->setProxy($proxy);
     }
 
+    /** @return array<string, array{string}> */
+    public static function validProxyProvider(): array
+    {
+        return [
+            'http'    => ['http://proxy.example.com:8080'],
+            'https'   => ['https://proxy.example.com:8080'],
+            'socks5'  => ['socks5://proxy.example.com:1080'],
+            'socks5h' => ['socks5h://proxy.example.com:1080'],
+        ];
+    }
+
+    #[DataProvider('validProxyProvider')]
+    public function testValidProxy(string $proxy): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $this->expectNotToPerformAssertions();
+        $geocoder->setProxy($proxy);
+    }
+
     public function testProxy(): void
     {
         $proxy = getenv('PROXY');

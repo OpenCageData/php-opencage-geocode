@@ -50,10 +50,10 @@ class Geocoder
         if (
             $parsed === false
             || !isset($parsed['scheme'])
-            || !in_array($parsed['scheme'], ['http', 'https', 'socks5'], true)
+            || !in_array($parsed['scheme'], ['http', 'https', 'socks5', 'socks5h'], true)
             || !isset($parsed['host'])
         ) {
-            throw new \Exception('Invalid proxy URL: must include a valid scheme (http, https, or socks5) and host');
+            throw new \Exception('Invalid proxy URL: must include a valid scheme (http, https, socks5 or socks5h) and host');
         }
         $this->proxy = $proxy;
         $this->client = null;
