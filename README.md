@@ -137,6 +137,44 @@ print_r($result['results'][0]['geometry']);
 // )
 ```
 
+## Usage with Laravel
+
+The library works without Laravel, but in a Laravel application it registers itself through package auto-discovery. Add your API key to `.env`:
+
+```
+OPENCAGE_API_KEY=YOUR-API-KEY
+```
+
+Then use the `OpenCage` facade, or let Laravel inject a fully configured `Geocoder`:
+
+```php
+use OpenCage;
+
+$result = OpenCage::geocode('82 Clerkenwell Road, London');
+```
+
+```php
+use OpenCage\Geocoder\Geocoder;
+
+class PlaceController
+{
+    public function __construct(private Geocoder $geocoder)
+    {
+    }
+
+    public function show()
+    {
+        $result = $this->geocoder->geocodeReverse(43.831, 4.360);
+    }
+}
+```
+
+Optionally set `OPENCAGE_TIMEOUT` (in seconds, default 10) and `OPENCAGE_PROXY` in `.env`. To change the configuration in code instead, publish the config file to `config/opencage.php`:
+
+```
+php artisan vendor:publish --tag=opencage-config
+```
+
 ## Example results
 
 

@@ -26,7 +26,8 @@
   "require-dev": {
     "phpunit/phpunit": "^12.5.8 || ^13.0",
     "squizlabs/php_codesniffer": "^3.7 || ^4.0",
-    "phpstan/phpstan": "^2.0" 
+    "phpstan/phpstan": "^2.0",
+    "illuminate/support": "^13.0" 
   },
   "scripts": {
     "test": "phpunit --display-deprecations",
@@ -46,11 +47,22 @@
     "geocode",
     "addresses",
     "geocoding",
-    "opencagedata"
+    "opencagedata",
+    "laravel"
   ],
   "support": {
     "issues": "https://github.com/OpenCageData/php-opencage-geocode/issues",
     "source": "https://github.com/OpenCageData/php-opencage-geocode",
     "docs": "https://opencagedata.com/api"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "OpenCage\\Geocoder\\Laravel\\GeocoderServiceProvider"
+      ],
+      "aliases": {
+        "OpenCage": "OpenCage\\Geocoder\\Laravel\\OpenCage"
+      }
+    }
   }
 }
