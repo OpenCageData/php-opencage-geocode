@@ -3,7 +3,6 @@
 namespace OpenCage\Geocoder;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
 use OpenCage\Geocoder\Exception\RequestFailedException;
@@ -24,7 +23,7 @@ class Geocoder
     protected readonly string $user_agent;
     protected ?Client $client = null;
 
-    public function __construct(?string $key = null)
+    public function __construct(#[\SensitiveParameter] ?string $key = null)
     {
         if (isset($key) && !empty($key)) {
             $this->setKey($key);
@@ -34,7 +33,7 @@ class Geocoder
         $this->user_agent = 'opencage-php/' . self::VERSION . ' (PHP ' . phpversion() . '; ' . php_uname('s') . ' ' . php_uname('r') . ')';
     }
 
-    public function setKey(string $key): void
+    public function setKey(#[\SensitiveParameter] string $key): void
     {
         $this->key = $key;
     }
@@ -45,7 +44,7 @@ class Geocoder
         $this->client = null;
     }
 
-    public function setProxy(string $proxy): void
+    public function setProxy(#[\SensitiveParameter] string $proxy): void
     {
         $parsed = parse_url($proxy);
         if (
@@ -115,7 +114,7 @@ class Geocoder
 
         try {
             $promise = $this->client->getAsync($url, ['http_errors' => false]);
-        } catch (\InvalidArgumentException $e) {
+        } catch (\Exception $e) {
             // Guzzle parses the URL before returning a promise
             throw $this->redactedException($e);
         }
@@ -202,7 +201,7 @@ class Geocoder
         return new Client($config);
     }
 
-    protected function getJSON(string $query): string
+    protected function getJSON(#[\SensitiveParameter] string $query): string
     {
         if ($this->client === null) {
             $this->client = $this->buildClient();
@@ -211,8 +210,7 @@ class Geocoder
         try {
             $response = $this->client->get($query, ['http_errors' => false]);
             return (string) $response->getBody();
-        } catch (GuzzleException | \InvalidArgumentException $e) {
-            // \InvalidArgumentException: Guzzle's MalformedUriException isn't a GuzzleException
+        } catch (\Exception $e) {
             if ($this->isNetworkError($e)) {
                 return $this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($e->getMessage()));
             }
@@ -220,9 +218,11 @@ class Geocoder
         }
     }
 
-    protected function redactedException(\Throwable $e): RequestFailedException
+    protected function redactedException(#[\SensitiveParameter] \Throwable $e): RequestFailedException
     {
-        // not chained as $previous: the original's message and handler context hold the full key
+        // not chained as $previous: the original's message and handler context hold the full key.
+        // #[\SensitiveParameter] keeps the key (and proxy credentials) out of stack trace arguments,
+        // which PHP records unless zend.exception_ignore_args is on
         return new RequestFailedException('request failed: ' . $this->sanitizeMessage($e->getMessage()));
     }
 

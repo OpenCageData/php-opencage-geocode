@@ -144,6 +144,16 @@ class NetworkTest extends TestCase
         $this->assertThrowsWithoutKey(fn () => $this->geocoderFailingWith($exception)->geocodeAsync('London')->wait(), ...$expected);
     }
 
+    public function testOtherExceptionIsThrownWithoutKey(): void
+    {
+        // not a Guzzle exception, e.g. 'Can not initialize cURL handle.'
+        $exception = new \RuntimeException('some failure');
+
+        $expected = 'request failed: some failure';
+        $this->assertThrowsWithoutKey(fn () => $this->geocoderFailingWith($exception)->geocode('London'), $expected);
+        $this->assertThrowsWithoutKey(fn () => $this->geocoderFailingWith($exception)->geocodeAsync('London')->wait(), $expected);
+    }
+
     public function testUnparsableUrlIsThrownWithoutKey(): void
     {
         // setHost() rejects this port, so set the URL directly. Guzzle can't parse it and sends
@@ -162,6 +172,8 @@ class NetworkTest extends TestCase
 
     private function assertThrowsWithoutKey(callable $request, string ...$expectedInMessage): void
     {
+        // record stack trace arguments, like PHP does without a php.ini
+        $ignoreArgs = ini_set('zend.exception_ignore_args', '0');
         try {
             $request();
         } catch (\Throwable $e) {
@@ -173,9 +185,31 @@ class NetworkTest extends TestCase
                 $this->assertStringContainsString($expected, $e->getMessage());
             }
             $this->assertStringNotContainsString(self::OPENCAGE_TEST_APIKEY_200, $e->getMessage());
+            $this->assertNotEmpty(array_column($e->getTrace(), 'args'), 'stack trace arguments are recorded');
+            foreach ($this->stringArgsInTrace($e) as $arg) {
+                $this->assertStringNotContainsString(self::OPENCAGE_TEST_APIKEY_200, $arg);
+            }
             return;
+        } finally {
+            if ($ignoreArgs !== false) {
+                ini_set('zend.exception_ignore_args', $ignoreArgs);
+            }
         }
         $this->fail('no exception thrown');
+    }
+
+    /** @return list<string> */
+    private function stringArgsInTrace(\Throwable $e): array
+    {
+        $strings = [];
+        foreach ($e->getTrace() as $frame) {
+            foreach ($frame['args'] ?? [] as $arg) {
+                if (is_string($arg)) {
+                    $strings[] = $arg;
+                }
+            }
+        }
+        return $strings;
     }
 
     /** @return array<string, array{string}> */
@@ -238,6 +272,27 @@ class NetworkTest extends TestCase
         $geocoder->setProxy($proxy);
     }
 
+    public function testInvalidProxyIsThrownWithoutCredentials(): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $ignoreArgs = ini_set('zend.exception_ignore_args', '0');
+        try {
+            $geocoder->setProxy('ftp://user:s3cret@proxy.example.com:8080');
+        } catch (\Exception $e) {
+            $this->assertStringNotContainsString('s3cret', $e->getMessage());
+            $this->assertNotEmpty(array_column($e->getTrace(), 'args'), 'stack trace arguments are recorded');
+            foreach ($this->stringArgsInTrace($e) as $arg) {
+                $this->assertStringNotContainsString('s3cret', $arg);
+            }
+            return;
+        } finally {
+            if ($ignoreArgs !== false) {
+                ini_set('zend.exception_ignore_args', $ignoreArgs);
+            }
+        }
+        $this->fail('no exception thrown');
+    }
+
     /** @return array<string, array{string}> */
     public static function validProxyProvider(): array
     {
@@ -267,7 +322,8 @@ class NetworkTest extends TestCase
         try {
             $geocoder->setProxy($proxy);
         } catch (\Exception $e) {
-            $this->markTestSkipped('PROXY environment variable is not a valid proxy URL: ' . $proxy);
+            // without the value: a proxy URL can contain credentials
+            $this->markTestSkipped('PROXY environment variable is not a valid proxy URL');
         }
 
         $result = $geocoder->geocode("82 Clerkenwell Road, London");
