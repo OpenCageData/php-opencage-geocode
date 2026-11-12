@@ -1,4 +1,8 @@
-unreleased
+4.2.2 -- Fri Nov 13 2026
+=====================================================
+- 4.2.1 still reported itself as version 4.2.0
+
+4.2.1 -- Fri Nov 13 2026
 =====================================================
 - every request error other than a network error is now thrown as RequestFailedException.
    4.2.0 missed errors which weren't Guzzle exceptions
