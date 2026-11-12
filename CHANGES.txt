@@ -1,3 +1,14 @@
+4.2.0 -- Thu Nov 12 2026
+=====================================================
+- 4.1.0 still reported itself as version 4.0.2, we forgot to update the version number
+- request errors other than network errors are now thrown as
+   OpenCage\Geocoder\Exception\RequestFailedException (a RuntimeException) instead of
+   Guzzle's exception classes GuzzleHttp\Exception\RequestException (or a subclass)
+   and GuzzleHttp\Psr7\Exception\MalformedUriException
+- setHost() rejects localhost ports outside 1-65535 leading to a better error message.
+   Also setHost('::1') works now (being treated as IPv6), as does '[::1]' and '[::1]:port'.
+   It'll be rare somebody tunnels requests through their localhost.
+
 4.1.0 -- Sat Nov 7 2026
 =====================================================
 - require PHP 8.3 or newer. On PHP 8.2, Composer keeps installing 4.0.x

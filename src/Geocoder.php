@@ -11,7 +11,7 @@ use Psr\Http\Client\NetworkExceptionInterface;
 
 class Geocoder
 {
-    public const VERSION  = '4.0.2';  // if changing this => remember to match everything with the git tag
+    public const VERSION  = '4.2.0';  // if changing this => remember to match everything with the git tag
 
     public const TIMEOUT = 10;
     public const URL = 'https://api.opencagedata.com/geocode/v1/json/?';
