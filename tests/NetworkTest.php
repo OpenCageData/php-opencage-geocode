@@ -3,6 +3,7 @@
 namespace OpenCage\Geocoder\Test;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
@@ -111,6 +112,31 @@ class NetworkTest extends TestCase
         } catch (RequestException $e) {
             $this->assertSame($exception, $e);
         }
+    }
+
+    /** @return array<string, array{string}> */
+    public static function configuredKeyProvider(): array
+    {
+        return [
+            'valid key'        => [self::OPENCAGE_TEST_APIKEY_200],
+            'leading space'    => [' ' . self::OPENCAGE_TEST_APIKEY_200],
+            'quoted'           => ['"' . self::OPENCAGE_TEST_APIKEY_200 . '"'],
+            'trailing newline' => [self::OPENCAGE_TEST_APIKEY_200 . "\n"],
+        ];
+    }
+
+    #[DataProvider('configuredKeyProvider')]
+    public function testNetworkErrorMessageRedactsUrlEncodedKey(string $key): void
+    {
+        // a key with stray characters, e.g. from a config file, is URL-encoded in the request URL
+        $request = new Request('GET', 'https://api.opencagedata.com/geocode/v1/json/?q=London&key=' . urlencode($key));
+        $exception = new ConnectException('cURL error 7: Failed to connect for ' . $request->getUri(), $request);
+
+        $result = $this->geocoderFailingWith($exception)->geocode('London');
+
+        $this->assertEquals(498, $result['status']['code']);
+        $this->assertStringContainsString('...REDACTED', $result['status']['message']);
+        $this->assertStringNotContainsString(substr(self::OPENCAGE_TEST_APIKEY_200, 6), $result['status']['message']);
     }
 
     private function geocoderFailingWith(\Throwable $exception): Geocoder

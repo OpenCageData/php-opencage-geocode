@@ -214,9 +214,9 @@ class Geocoder
 
     protected function sanitizeMessage(string $message): string
     {
-        // API keys are 32-character hex strings, which urlencode() leaves unchanged,
-        // so matching the first 6 characters as alphanumeric covers every valid key
-        return (string) preg_replace('/([?&])key=([a-zA-Z0-9]{6})[^&]*/', '$1key=$2...REDACTED', $message);
+        // redact whatever follows key=, not only alphanumeric keys: a valid key with a stray
+        // character, e.g. a leading space from a config file, is URL-encoded ('+6d0e...')
+        return (string) preg_replace('/([?&])key=([^&]{0,6})[^&]*/', '$1key=$2...REDACTED', $message);
     }
 
     protected function generateErrorJSON(int $code, string $message): string
