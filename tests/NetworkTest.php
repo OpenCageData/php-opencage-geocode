@@ -10,6 +10,7 @@ use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Uri;
+use OpenCage\Geocoder\Exception\RequestFailedException;
 use OpenCage\Geocoder\Geocoder;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -133,23 +134,48 @@ class NetworkTest extends TestCase
         }
     }
 
-    public function testOtherTransferExceptionIsThrown(): void
+    public function testOtherTransferExceptionIsThrownWithoutKey(): void
     {
-        $exception = new RequestException('cURL error 60: SSL certificate problem', new Request('GET', 'https://api.opencagedata.com/'));
+        $request = new Request('GET', 'https://api.opencagedata.com/geocode/v1/json/?q=London&key=' . self::OPENCAGE_TEST_APIKEY_200);
+        $exception = new RequestException('cURL error 60: SSL certificate problem for ' . $request->getUri(), $request);
 
-        try {
-            $this->geocoderFailingWith($exception)->geocode('London');
-            $this->fail('sync: no exception thrown');
-        } catch (RequestException $e) {
-            $this->assertSame($exception, $e);
-        }
+        $expected = ['cURL error 60', 'key=6d0e71...REDACTED'];
+        $this->assertThrowsWithoutKey(fn () => $this->geocoderFailingWith($exception)->geocode('London'), ...$expected);
+        $this->assertThrowsWithoutKey(fn () => $this->geocoderFailingWith($exception)->geocodeAsync('London')->wait(), ...$expected);
+    }
 
+    public function testUnparsableUrlIsThrownWithoutKey(): void
+    {
+        // setHost() rejects this port, so set the URL directly. Guzzle can't parse it and sends
+        // no request. Guzzle 7's message contains the full URL, Guzzle 8's leaves out the query string
+        $geocoder = new class (self::OPENCAGE_TEST_APIKEY_200) extends Geocoder {
+            public function __construct(string $key)
+            {
+                parent::__construct($key);
+                $this->url = 'https://localhost:99999/geocode/v1/json/?';
+            }
+        };
+
+        $this->assertThrowsWithoutKey(fn () => $geocoder->geocode('London'), 'localhost:99999');
+        $this->assertThrowsWithoutKey(fn () => $geocoder->geocodeAsync('London')->wait(), 'localhost:99999');
+    }
+
+    private function assertThrowsWithoutKey(callable $request, string ...$expectedInMessage): void
+    {
         try {
-            $this->geocoderFailingWith($exception)->geocodeAsync('London')->wait();
-            $this->fail('async: no exception thrown');
-        } catch (RequestException $e) {
-            $this->assertSame($exception, $e);
+            $request();
+        } catch (\Throwable $e) {
+            // not Guzzle's exception, and not chained: its message and handler context hold the key
+            $this->assertSame(RequestFailedException::class, $e::class);
+            $this->assertInstanceOf(\RuntimeException::class, $e);
+            $this->assertNull($e->getPrevious());
+            foreach ($expectedInMessage as $expected) {
+                $this->assertStringContainsString($expected, $e->getMessage());
+            }
+            $this->assertStringNotContainsString(self::OPENCAGE_TEST_APIKEY_200, $e->getMessage());
+            return;
         }
+        $this->fail('no exception thrown');
     }
 
     /** @return array<string, array{string}> */

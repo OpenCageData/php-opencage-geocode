@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Promise\Create;
 use GuzzleHttp\Promise\PromiseInterface;
+use OpenCage\Geocoder\Exception\RequestFailedException;
 use Psr\Http\Client\NetworkExceptionInterface;
 
 class Geocoder
@@ -112,7 +113,14 @@ class Geocoder
             $this->client = $this->buildClient();
         }
 
-        return $this->client->getAsync($url, ['http_errors' => false])
+        try {
+            $promise = $this->client->getAsync($url, ['http_errors' => false]);
+        } catch (\InvalidArgumentException $e) {
+            // Guzzle parses the URL before returning a promise
+            throw $this->redactedException($e);
+        }
+
+        return $promise
             ->then(function (\Psr\Http\Message\ResponseInterface $response) {
                 $ret = json_decode((string) $response->getBody(), true);
                 if (!is_array($ret)) {
@@ -120,10 +128,13 @@ class Geocoder
                 }
                 return $ret;
             }, function (mixed $reason) {
-                if ($reason instanceof \Throwable && $this->isNetworkError($reason)) {
+                if (!$reason instanceof \Throwable) {
+                    return Create::rejectionFor($reason);
+                }
+                if ($this->isNetworkError($reason)) {
                     return json_decode($this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($reason->getMessage())), true);
                 }
-                return Create::rejectionFor($reason);
+                return Create::rejectionFor($this->redactedException($reason));
             });
     }
 
@@ -200,12 +211,19 @@ class Geocoder
         try {
             $response = $this->client->get($query, ['http_errors' => false]);
             return (string) $response->getBody();
-        } catch (GuzzleException $e) {
+        } catch (GuzzleException | \InvalidArgumentException $e) {
+            // \InvalidArgumentException: Guzzle's MalformedUriException isn't a GuzzleException
             if ($this->isNetworkError($e)) {
                 return $this->generateErrorJSON(498, 'network issue ' . $this->sanitizeMessage($e->getMessage()));
             }
-            throw $e;
+            throw $this->redactedException($e);
         }
+    }
+
+    protected function redactedException(\Throwable $e): RequestFailedException
+    {
+        // not chained as $previous: the original's message and handler context hold the full key
+        return new RequestFailedException('request failed: ' . $this->sanitizeMessage($e->getMessage()));
     }
 
     protected function isNetworkError(\Throwable $e): bool
