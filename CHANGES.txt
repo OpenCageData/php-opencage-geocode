@@ -1,18 +1,12 @@
-4.1.0 -- Thu Nov 5 2026 
+4.1.0 -- Sat Nov 7 2026
 =====================================================
-- require PHP 8.3 or newer. PHP 8.2 security support ends on 2026-12-31.
-   On PHP 8.2, Composer keeps installing 4.0.x
-- support Guzzle 8. Like with Guzzle 7 network errors and timeouts return status 498
-- tighten checks for invalid hosts
-- fix demo/geocode.php, broken since 4.0.0: it now loads Composer's autoloader.
-   Installing without Composer is no longer possible (Guzzle dependency)
+- require PHP 8.3 or newer. On PHP 8.2, Composer keeps installing 4.0.x
+- support Guzzle 8. Like with Guzzle 7 network errors and timeouts return HTTP status 498
+- feature: setProxy() also accepts socks5h:// proxy URLs (where the proxy resolves the hostname)
+- Laravel support: auto-discovered service provider, see README.md
 - optional parameters named 'q' or 'key' (in any letter case) are now ignored.
-   Before, an optional 'key' replaced the configured API key, because the API
-   uses the first 'key' parameter and reads parameter names case-insensitively.
-- setProxy() also accepts socks5h:// proxy URLs, where the proxy resolves the hostname
-- HTTP redirects are no longer followed. The API doesn't send any
-- Laravel support: auto-discovered service provider, OpenCage facade, and a
-   config/opencage.php that reads OPENCAGE_API_KEY, OPENCAGE_TIMEOUT and OPENCAGE_PROXY
+- fixed demo page (demo/geocode.php)
+- HTTP redirects are no longer followed. The API doesn't send any anyway
 - tests: explicitly test against lowest supported PHP and Guzzle ("prefer-lowest")
 
 4.0.2 -- Fri Aug 7 2026
