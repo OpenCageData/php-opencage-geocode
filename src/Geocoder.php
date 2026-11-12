@@ -77,7 +77,7 @@ class Geocoder
     }
 
     /**
-     * @param array<string, string> $optParams
+     * @param array<string, scalar|null> $optParams
      * @return array{status: array{code: int, message: string}, results: list<mixed>, total_results: int, ...}
      */
     public function geocode(string $query, array $optParams = []): array
@@ -93,7 +93,7 @@ class Geocoder
     }
 
     /**
-     * @param array<string, string> $optParams
+     * @param array<string, scalar|null> $optParams
      * @return array{status: array{code: int, message: string}, results: list<mixed>, total_results: int, ...}
      */
     public function geocodeReverse(float|string $latitude, float|string $longitude, array $optParams = []): array
@@ -101,13 +101,13 @@ class Geocoder
         return $this->geocode($latitude . ',' . $longitude, $optParams);
     }
 
-    /** @param array<string, string> $optParams */
+    /** @param array<string, scalar|null> $optParams */
     public function geocodeReverseAsync(float|string $latitude, float|string $longitude, array $optParams = []): PromiseInterface
     {
         return $this->geocodeAsync($latitude . ',' . $longitude, $optParams);
     }
 
-    /** @param array<string, string> $optParams */
+    /** @param array<string, scalar|null> $optParams */
     public function geocodeAsync(string $query, array $optParams = []): PromiseInterface
     {
         $url = $this->buildUrl($query, $optParams);
@@ -141,19 +141,19 @@ class Geocoder
             });
     }
 
-    /** @param array<string, string> $optParams */
+    /** @param array<string, scalar|null> $optParams */
     protected function buildUrl(string $query, array $optParams = []): string
     {
         $url = $this->url . 'q=' . urlencode($query);
 
         if (!empty($optParams)) {
             foreach ($optParams as $param => $paramValue) {
-                // the API reads parameter names case-insensitively and uses the first 'key' it finds,
-                // so an optional 'key' (or 'KEY') would replace the configured API key
+                // the API reads parameter names case-insensitively, so an optional 'key' (or 'KEY')
+                // could replace the configured API key, wherever it is in the URL
                 if (in_array(strtolower($param), ['q', 'key'], true)) {
                     continue;
                 }
-                $url .= '&' . urlencode($param) . '=' . urlencode($paramValue);
+                $url .= '&' . urlencode($param) . '=' . urlencode($this->paramValueToString($param, $paramValue));
             }
         }
 
@@ -163,6 +163,18 @@ class Geocoder
         $url .= '&key=' . urlencode($this->key);
 
         return $url;
+    }
+
+    protected function paramValueToString(string $param, mixed $value): string
+    {
+        if (is_bool($value)) {
+            return $value ? '1' : '0';
+        }
+        if ($value === null || is_scalar($value)) {
+            return (string) $value;
+        }
+        // e.g. an array, when an application passes request input like ?language[]=en through
+        throw new \InvalidArgumentException("Invalid value for optional parameter '$param': must be a string, number or boolean");
     }
 
     protected function isValidHost(string $host): bool

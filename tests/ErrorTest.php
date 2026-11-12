@@ -75,9 +75,39 @@ class ErrorTest extends TestCase
         $this->assertStringEndsWith('&key=' . self::OPENCAGE_TEST_APIKEY_200, $url);
     }
 
+    public function testOptionalParamValuesAreConvertedToStrings(): void
+    {
+        $geocoder = new class (self::OPENCAGE_TEST_APIKEY_200) extends Geocoder {
+            /** @param array<string, scalar|null> $optParams */
+            public function exposeBuildUrl(string $query, array $optParams): string
+            {
+                return $this->buildUrl($query, $optParams);
+            }
+        };
+        $url = $geocoder->exposeBuildUrl('Johannesburg', [
+            'limit' => 1,
+            'no_annotations' => true,
+            'abbrv' => false,
+            'min_confidence' => 2.5,
+            'language' => null,
+            'countrycode' => 'za',
+        ]);
+
+        $this->assertStringContainsString('?q=Johannesburg&limit=1&no_annotations=1&abbrv=0&min_confidence=2.5&language=&countrycode=za&key=', $url);
+    }
+
+    public function testOptionalParamArrayValueIsRejected(): void
+    {
+        // what an application gets from ?language[]=en when it passes request input through
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Invalid value for optional parameter 'language'");
+        $geocoder->geocode('Johannesburg', ['language' => ['en']]); // @phpstan-ignore argument.type
+    }
+
     public function testOptionalKeyDoesNotReplaceConfiguredKey(): void
     {
-        // before the fix the API used the optional key, because it reads the first 'key' parameter
+        // before the fix the API used the optional key: it reads parameter names case-insensitively
         $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
         $result = $geocoder->geocode('Johannesburg', ['KEY' => self::OPENCAGE_TEST_APIKEY_402]);
         $this->assertEquals(200, $result['status']['code']);
