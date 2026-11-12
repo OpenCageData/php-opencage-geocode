@@ -2,6 +2,9 @@ unreleased
 =====================================================
 - every request error other than a network error is now thrown as RequestFailedException.
    4.2.0 missed errors which weren't Guzzle exceptions
+- setTimeout() now rejects values below 1. Before, 0 meant no timeout at all. Negative
+   caused failure with the first HTTP request. And value between 0 and 0.5 were rounded
+   to 0 (thus not timeout) which is probably not what the user expected.
 
 4.2.0 -- Thu Nov 12 2026
 =====================================================

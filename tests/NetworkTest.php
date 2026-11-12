@@ -88,6 +88,24 @@ class NetworkTest extends TestCase
         $this->assertStringNotContainsString(self::OPENCAGE_TEST_APIKEY_200, $result['status']['message']);
     }
 
+    /** @return array<string, array{int}> */
+    public static function invalidTimeoutProvider(): array
+    {
+        return [
+            'zero (no timeout in Guzzle)' => [0],
+            'negative'                    => [-1],
+        ];
+    }
+
+    #[DataProvider('invalidTimeoutProvider')]
+    public function testInvalidTimeout(int $timeout): void
+    {
+        $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid timeout: must be at least 1 second');
+        $geocoder->setTimeout($timeout);
+    }
+
     public function testSetTimeout(): void
     {
         $geocoder = new Geocoder(self::OPENCAGE_TEST_APIKEY_200);

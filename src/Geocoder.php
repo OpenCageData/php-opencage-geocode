@@ -40,6 +40,10 @@ class Geocoder
 
     public function setTimeout(int $timeout): void
     {
+        // Guzzle treats 0 as 'no timeout'
+        if ($timeout < 1) {
+            throw new \Exception('Invalid timeout: must be at least 1 second');
+        }
         $this->timeout = $timeout;
         $this->client = null;
     }
