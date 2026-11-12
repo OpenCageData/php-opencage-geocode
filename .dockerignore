@@ -1,0 +1,5 @@
+.git
+.vagrant
+.claude
+.phpunit.cache
+vendor
