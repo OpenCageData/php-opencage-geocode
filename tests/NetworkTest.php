@@ -9,6 +9,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Uri;
 use OpenCage\Geocoder\Geocoder;
 use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -21,7 +22,44 @@ class NetworkTest extends TestCase
             'other domain'                     => ['www.example.com'],
             'subdomain, trailing newline'      => ["api.opencagedata.com\n"],
             'localhost:port, trailing newline' => ["localhost:8080\n"],
+            'port 0'                           => ['localhost:0'],
+            'port out of range'                => ['localhost:65536'],
+            'port far out of range'            => ['127.0.0.1:99999'],
+            'IPv6 with port, no brackets'      => ['::1:8080'],
+            'IPv6, port out of range'          => ['[::1]:65536'],
         ];
+    }
+
+    /** @return array<string, array{string, string, int|null}> */
+    public static function hostUrlProvider(): array
+    {
+        return [
+            'api'              => ['api.opencagedata.com', 'api.opencagedata.com', null],
+            'localhost'        => ['localhost', 'localhost', null],
+            'port'             => ['127.0.0.1:8080', '127.0.0.1', 8080],
+            'lowest port'      => ['localhost:1', 'localhost', 1],
+            'highest port'     => ['0.0.0.0:65535', '0.0.0.0', 65535],
+            'IPv6'             => ['::1', '[::1]', null],
+            'IPv6 in brackets' => ['[::1]', '[::1]', null],
+            'IPv6 with port'   => ['[::1]:8080', '[::1]', 8080],
+        ];
+    }
+
+    #[DataProvider('hostUrlProvider')]
+    public function testValidHostBuildsParsableUrl(string $host, string $expectedHost, ?int $expectedPort): void
+    {
+        $geocoder = new class (self::OPENCAGE_TEST_APIKEY_200) extends Geocoder {
+            public function exposeBuildUrl(string $query): string
+            {
+                return $this->buildUrl($query);
+            }
+        };
+        $geocoder->setHost($host);
+
+        // Guzzle parses the URL the same way before sending the request
+        $uri = new Uri($geocoder->exposeBuildUrl('London'));
+        $this->assertSame($expectedHost, $uri->getHost());
+        $this->assertSame($expectedPort, $uri->getPort());
     }
 
     #[DataProvider('invalidHostProvider')]

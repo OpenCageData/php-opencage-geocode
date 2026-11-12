@@ -64,6 +64,10 @@ class Geocoder
         if (!$this->isValidHost($host)) {
             throw new \Exception('Invalid host: must be localhost or an opencagedata.com subdomain');
         }
+        if ($host === '::1') {
+            // an IPv6 address needs brackets in a URL
+            $host = '[::1]';
+        }
         $this->url = str_replace('api.opencagedata.com', $host, self::URL);
         $this->client = null;
     }
@@ -149,15 +153,16 @@ class Geocoder
 
     protected function isValidHost(string $host): bool
     {
-        if (in_array($host, ['localhost', '127.0.0.1', '0.0.0.0', '::1'], true)) {
+        if (in_array($host, ['localhost', '127.0.0.1', '0.0.0.0', '::1', '[::1]'], true)) {
             return true;
         }
 
         // \z rather than $, which would also accept a trailing newline
 
-        // localhost with port
-        if (preg_match('/^(localhost|127\.0\.0\.1|0\.0\.0\.0)\:\d+\z/', $host)) {
-            return true;
+        // localhost with port. IPv6 only in brackets: in '::1:8080' the port would be part of the address
+        if (preg_match('/^(localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\]):(\d{1,5})\z/', $host, $matches)) {
+            $port = (int) $matches[2];
+            return $port >= 1 && $port <= 65535;
         }
 
         // opencagedata.com or any subdomain
