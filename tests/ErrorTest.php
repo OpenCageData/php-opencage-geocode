@@ -20,6 +20,33 @@ class ErrorTest extends TestCase
     }
 
     /** @return array<string, array{string}> */
+    public static function missingKeyProvider(): array
+    {
+        return [
+            'empty string' => [''],
+            'zero'         => ['0'],
+        ];
+    }
+
+    #[DataProvider('missingKeyProvider')]
+    public function testKeyIsMissing(string $key): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing API key');
+        (new Geocoder($key))->geocode('Johannesburg');
+    }
+
+    #[DataProvider('missingKeyProvider')]
+    public function testSetKeyIsMissing(string $key): void
+    {
+        $geocoder = new Geocoder();
+        $geocoder->setKey($key);
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Missing API key');
+        $geocoder->geocode('Johannesburg');
+    }
+
+    /** @return array<string, array{string}> */
     public static function reservedParamProvider(): array
     {
         return [
