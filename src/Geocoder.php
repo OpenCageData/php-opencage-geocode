@@ -53,6 +53,7 @@ class Geocoder
         $parsed = parse_url($proxy);
         if (
             $parsed === false
+            || preg_match('/[\s[:cntrl:]]/', $proxy) !== 0
             || !isset($parsed['scheme'])
             || !in_array($parsed['scheme'], ['http', 'https', 'socks5', 'socks5h'], true)
             || !isset($parsed['host'])

@@ -278,6 +278,8 @@ class NetworkTest extends TestCase
             'missing scheme'     => ['//example.com:8080'],
             'unsupported scheme' => ['ftp://example.com:8080'],
             'empty host'         => ['http:'],
+            'trailing newline'   => ["http://proxy.example.com:8080\n"],
+            'space in host'      => ['http://proxy example.com:8080'],
         ];
     }
 
@@ -315,10 +317,12 @@ class NetworkTest extends TestCase
     public static function validProxyProvider(): array
     {
         return [
-            'http'    => ['http://proxy.example.com:8080'],
-            'https'   => ['https://proxy.example.com:8080'],
-            'socks5'  => ['socks5://proxy.example.com:1080'],
-            'socks5h' => ['socks5h://proxy.example.com:1080'],
+            'http'     => ['http://proxy.example.com:8080'],
+            'https'    => ['https://proxy.example.com:8080'],
+            'socks5'   => ['socks5://proxy.example.com:1080'],
+            'socks5h'  => ['socks5h://proxy.example.com:1080'],
+            'userinfo' => ['http://user:s3cret@proxy.example.com:8080'],
+            'IPv6'     => ['socks5://[::1]:1080'],
         ];
     }
 
